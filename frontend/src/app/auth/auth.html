@@ -1,0 +1,19 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h2>{{isLoginMode()? 'Login' : 'Sign Up'}}</h2>
+  <main>
+    <div class="control-column">
+      <div class="control">
+        <label for="username">Username</label>
+        <input id="username" formControlName="username"/>
+      </div>
+      <div class="control">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password"/>
+      </div>
+    </div>
+    <div class="control-buttons">
+      <button (click)="onSwitchMode()">{{!isLoginMode()? 'Login' : 'Sign Up'}}</button>
+      <button class="login" type="submit">{{isLoginMode()? 'Login' : 'Sign Up'}}</button>
+    </div>
+  </main>
+</form>
