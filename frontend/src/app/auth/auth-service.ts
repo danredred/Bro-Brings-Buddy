@@ -1,7 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {
+  DestroyRef,
+  effect,
+  inject,
+  Injectable,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { catchError, Subject, tap, throwError } from 'rxjs';
 import { User } from './user.model';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
   token: string;
@@ -14,8 +22,11 @@ export interface AuthResponseData {
   providedIn: 'root',
 })
 export class AuthService {
-  user = new Subject<User>();
-  constructor(private httpClient: HttpClient) {}
+  private user = signal<User | undefined>(undefined);
+  public userData = this.user.asReadonly();
+  private httpClient = inject(HttpClient);
+  private tokenExpirationTimer: any;
+  private router = inject(Router);
 
   signup(username: string, password: string) {
     return this.authenticate('signup', username, password);
@@ -43,16 +54,33 @@ export class AuthService {
         }),
         tap({
           next: (resData) => {
-            const expirationDate = new Date(Date.now()+resData.expiresIn*1000)
+            const expirationDate = new Date(
+              Date.now() + resData.expiresIn * 1000
+            );
             const user = new User(
               resData.username,
               resData.token,
               expirationDate,
               resData.permission
             );
-            this.user.next(user);
+            this.user.set(user);
+            this.autoLogout(resData.expiresIn * 1000);
           },
         })
       );
+  }
+
+  logout() {
+    this.user.set(undefined);
+    this.router.navigate(['/auth']);
+    if (this.tokenExpirationTimer){
+      clearTimeout(this.tokenExpirationTimer)
+    }
+    this.tokenExpirationTimer = null;
+  }
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
   }
 }

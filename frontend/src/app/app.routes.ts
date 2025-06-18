@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { Auth } from './auth/auth';
 import { Home } from './home/home';
+import { AuthGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
   {
     path:'',
-    redirectTo:'/auth',
+    redirectTo:'/home',
     pathMatch:'full'
   },
   {
@@ -16,6 +17,7 @@ export const routes: Routes = [
   {
     path:'home',
     component:Home,
+    canActivate:[AuthGuard],
     title:'Home🏠'
   }
 ];

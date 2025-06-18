@@ -1,0 +1,13 @@
+<nav>
+  <img routerLink="/" class="logo" src="logo.png" alt="Logo" />
+  <ul class="center-options">
+    <li><a>Home</a></li>
+    <li><a>About</a></li>
+  </ul>
+  <ul>
+    @if(isAuthenticated()){
+    <li><p class="username">{{userName()}}</p></li>
+    <li><a (click)="onLogOut()">logout</a></li>
+}
+  </ul>
+</nav>
