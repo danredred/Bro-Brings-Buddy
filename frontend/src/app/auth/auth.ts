@@ -17,7 +17,8 @@ import { Observable } from 'rxjs';
   styleUrl: './auth.css',
 })
 export class Auth {
-  constructor(private authService: AuthService, private destroyRef: DestroyRef) {}
+  constructor(private authService: AuthService, private destroyRef: DestroyRef) {
+  }
 
   isLoginMode = signal(true);
   form = new FormGroup({  // TODO: ADD INVALID ERROR MESSAGES
