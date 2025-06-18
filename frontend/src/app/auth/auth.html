@@ -1,4 +1,10 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  @if(error()!==null){
+    <div class="alert alert-error">
+      <p>{{error()}}</p>
+    </div>
+  }
+  
   <h2>{{isLoginMode()? 'Login' : 'Sign Up'}}</h2>
   <main>
     <div class="control-column">

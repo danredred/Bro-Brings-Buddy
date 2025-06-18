@@ -24,3 +24,20 @@ button {
   border-radius: 8px;
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
 }
+
+.alert {
+  border-radius: 10px;
+  padding: 10px;
+  border-style: dashed;
+  width: fit-content;
+  margin: auto;
+}
+
+.alert-error{
+  border-color: red;
+  background-color: rgb(230, 191, 191);
+  color: rgb(125, 6, 6);
+  font-weight: bold;
+  padding-left: 20px;
+  padding-right: 20px;
+}
