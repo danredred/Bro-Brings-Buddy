@@ -1,5 +1,10 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  @if(error()!==null){
+  @if (form.dirty&&form.invalid&&form.touched) {
+    <div class="alert alert-invalid">
+      <p>{{error()===null? 'Password must be at least 6 characters':error()}}</p>
+    </div>
+  }
+  @else if(error()!==null){
     <div class="alert alert-error">
       <p>{{error()}}</p>
     </div>
@@ -10,11 +15,11 @@
     <div class="control-column">
       <div class="control">
         <label for="username">Username</label>
-        <input id="username" formControlName="username"/>
+        <input id="username" formControlName="username" maxlength="16"/>
       </div>
       <div class="control">
         <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password"/>
+        <input id="password" type="password" formControlName="password" maxlength="16"/>
       </div>
     </div>
     <div class="control-buttons">

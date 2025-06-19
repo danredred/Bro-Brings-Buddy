@@ -38,6 +38,7 @@ export class Auth {
 
   onSwitchMode() {
     this.isLoginMode.update((mode) => !mode);
+    this.error.set(null);
     this.form.reset();
   }
 
@@ -57,10 +58,16 @@ export class Auth {
       authObs = this.authService.signup(username, password);
     }
     const subscription = authObs.subscribe({
-      next: (value) => {console.log(value);this.router.navigate(['home'])},
-      error: error => {this.error.set(error);console.log('Error!');}
+      next: (value) => {
+        console.log(value);
+        this.router.navigate(['home']);
+      },
+      error: (error) => {
+        this.error.set(error);
+        console.log('Error!');
+      },
     });
-    this.destroyRef.onDestroy(()=>subscription.unsubscribe())
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
     this.form.reset();
   }
 }

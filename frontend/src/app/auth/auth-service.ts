@@ -1,13 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
-  DestroyRef,
-  effect,
   inject,
   Injectable,
-  OnInit,
   signal,
 } from '@angular/core';
-import { catchError, Subject, tap, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
 
@@ -46,14 +43,10 @@ export class AuthService {
         password,
       })
       .pipe(
-        catchError((errorRes) => {
-          let errorMassage = 'An unknown message occurred!';
-          console.log(errorRes);
-          return throwError(errorMassage);
-          //switch (errorRes)
-        }),
+        catchError(this.handleError),
         tap({
           next: (resData) => {
+            console.log('🐶');
             const expirationDate = new Date(
               Date.now() + resData.expiresIn * 1000
             );
@@ -82,5 +75,22 @@ export class AuthService {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
+  }
+
+  handleError(errorRes: HttpErrorResponse){
+    let errorMessage = 'An unknown message occurred!';
+    console.log(errorRes);
+    if (!errorRes.error || !errorRes.error.error) {
+      return throwError(errorMessage);
+    }
+    
+    switch (errorRes.error.message) {
+      case 'USERNAME_EXSITS':
+        errorMessage = 'A user already 🐻s this name';
+        break;
+      case 'INVALID_USER_CREDENTIAL':
+        errorMessage = 'Username or password incorect.🙂‍↔️';
+    }
+    return throwError(errorMessage);
   }
 }

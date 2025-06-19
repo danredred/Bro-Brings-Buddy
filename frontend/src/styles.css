@@ -6,16 +6,16 @@ html {
   height: 100%;
 }
 
-body{
+body {
   font-family: "Poppins", sans-serif;
-  background-image: radial-gradient(circle at center, white,gray);
+  background-image: radial-gradient(circle at center, white, gray);
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
 input {
-  border-radius:7px;
+  border-radius: 7px;
   margin-left: 10px;
 }
 
@@ -31,13 +31,13 @@ button {
   border-style: dashed;
   width: fit-content;
   margin: auto;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-.alert-error{
+.alert-error {
   border-color: red;
   background-color: rgb(230, 191, 191);
   color: rgb(125, 6, 6);
   font-weight: bold;
-  padding-left: 20px;
-  padding-right: 20px;
 }
