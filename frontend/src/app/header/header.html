@@ -6,7 +6,7 @@
   </ul>
   <ul>
     @if(isAuthenticated()){
-    <li><p class="username">{{userName()}}</p></li>
+    <li><app-usercard [username]="userName()"/></li>
     <li><a (click)="onLogOut()">logout</a></li>
 }
   </ul>

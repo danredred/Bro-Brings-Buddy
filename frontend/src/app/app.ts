@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from "./header/header";
+import { Usercard } from './shared/usercard/usercard';
 
 @Component({
   selector: 'app-root',

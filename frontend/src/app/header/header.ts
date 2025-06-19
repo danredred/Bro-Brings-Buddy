@@ -8,10 +8,11 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../auth/auth-service';
+import { Usercard } from "../shared/usercard/usercard";
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, Usercard],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
