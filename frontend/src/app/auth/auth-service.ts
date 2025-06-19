@@ -38,7 +38,7 @@ export class AuthService {
     password: string
   ) {
     return this.httpClient
-      .post<AuthResponseData>(`http://localhost:3000/auth/${mode}`, {
+      .post<AuthResponseData>(`http://localhost:3000/users/${mode}`, {
         username: username,
         password,
       })
