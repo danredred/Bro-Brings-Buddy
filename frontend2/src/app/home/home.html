@@ -1,19 +1,35 @@
-@if(!isAdmin()){
-    @if (myAppliction().length) {
-    <mat-list>
-        @for (application of myAppliction(); track $index) {
-            <mat-list-item>
-                <app-application [app]="application"/>
-            </mat-list-item>
-        }
-    </mat-list>
+@if(!isAdmin()){ @if (myAppliction().length) {
+<mat-list>
+  @for (application of myAppliction(); track $index) {
+  <mat-list-item>
+    <app-application [app]="application" />
+  </mat-list-item>
+  }
+</mat-list>
+} @else {
+<p>No one Submitted an application about you</p>
+} } @if(isMember()||isAdmin()){
+<div>
+  <title>Submit for a peasant</title>
+  <button matButton [matMenuTriggerFor]="menu">Member Submition</button>
+  <mat-menu #menu="matMenu">
+    @for (user of peasants(); track $index) {
+    <button (click)="onSubmitUser(user)" mat-menu-item><app-user [username]="user" /></button>
     }
-    @else {
-        <p>No one Submitted an application about you</p>
+  </mat-menu>
+</div>
+} @if (isAdmin()) {
+<div>
+  <title>Submit for a member</title>
+  <button matButton [matMenuTriggerFor]="menu">Admin Submition</button>
+  <mat-menu #menu="matMenu">
+    @for (user of members(); track $index) {
+        <button (click)="onSubmitUser(user)" mat-menu-item> <app-user [username]="user" /></button>
     }
+  </mat-menu>
+</div>
+<!-- <app-applications-list [applications]="applications()"/> -->
+@for (app of applications(); track $index) {
+  <app-application [app]="app" (approve)="onApprove($event,$index)" (deapprove)="onDeapprove($event,$index)"></app-application>
 }
-@else {
-    <p>
-        dog
-    </p>
 }

@@ -3,11 +3,24 @@ import { AuthService } from '../auth/auth.service';
 import { ApplicationService } from '../application/application.service';
 import { ApplicationData } from '../application/applicationData.model';
 import { MatListModule } from '@angular/material/list';
-import { Application } from "../application/application";
+import { Application } from '../application/application';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { User } from '../shared/user/user';
+import { ApplicationsList } from '../application/applications-list/applications-list';
 
 @Component({
   selector: 'app-home',
-  imports: [MatListModule, Application],
+  imports: [
+    MatListModule,
+    Application,
+    MatCardModule,
+    MatButtonModule,
+    MatMenuModule,
+    User,
+    ApplicationsList,
+  ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -20,13 +33,54 @@ export class Home implements OnInit {
   myAppliction = signal<ApplicationData[]>([]);
   isAdmin = computed(() => this.authService.userData()?.isAdmin === true);
   isMember = computed(() => this.authService.userData()?.isMember === true);
+  peasants = signal<string[]>([]);
+  members = signal<string[]>([]);
+  applications = signal<ApplicationData[]>([]);
 
   ngOnInit(): void {
     if (this.authService.userData()?.isAdmin === false) {
+      // get my applications
       const subscription = this.applicationService
         .getMyApplications()
         .subscribe((apps) => this.myAppliction.set(apps));
       this.destroyRef.onDestroy(() => subscription.unsubscribe());
     }
+    if (
+      this.authService.userData()?.isMember ||
+      this.authService.userData()?.isAdmin
+    ) {
+      this.applicationService.getUsers('PEASANT').subscribe((users) => {
+        console.log(users);
+        this.peasants.set(users);
+      });
+    }
+    if (this.authService.userData()?.isAdmin) {
+      this.applicationService
+        .getUsers('MEMBER')
+        .subscribe((users) => this.members.set(users));
+      this.applicationService.getApplications().subscribe((apps) => {
+        this.applications.set(apps.sort((a, b) => +a.closed - +b.closed));
+      });
+    }
+  }
+  onSubmitUser(username: string) {
+    this.applicationService
+      .createApplication(username)
+      .subscribe((a) => console.log(a));
+  }
+  onApprove(id: string, index: number) {
+    this.applicationService.approveApplication(+id).subscribe(() => {
+      this.applications.update((apps) => {
+        apps[index].approvers.push(this.authService.userData()!.username);
+        return apps;
+      });
+    });
+  }
+  onDeapprove(id: string, index: number) {
+    this.applicationService.deapproveApplication(+id).subscribe(() => {
+      this.applications.update((apps) => {
+        return apps.splice(index,1);
+      });
+    });
   }
 }

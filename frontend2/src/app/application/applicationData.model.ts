@@ -1,7 +1,7 @@
 export interface ApplicationData {
   id: number;
   submitter: string;
-  voted: string[];
+  approvers: string[];
   type: 'TOADMIN' | 'TOMEMBER';
   closed: boolean;
   about: string;
