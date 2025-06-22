@@ -14,7 +14,7 @@ body {
   height: 100%;
 }
 
-input {
+/* input {
   border-radius: 7px;
   margin-left: 10px;
 }
@@ -23,7 +23,7 @@ button {
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
-}
+} */
 
 .alert {
   border-radius: 10px;
@@ -40,4 +40,11 @@ button {
   background-color: rgb(230, 191, 191);
   color: rgb(125, 6, 6);
   font-weight: bold;
+}
+
+.logo {
+  -webkit-mask-image: url(../public/logo-masking.png);
+  mask-image: url(../public/logo-masking.png);
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }

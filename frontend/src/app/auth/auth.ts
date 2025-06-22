@@ -10,10 +10,29 @@ import {
 import { AuthResponseData, AuthService } from './auth-service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+} from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { NgOptimizedImage } from '@angular/common';
 @Component({
   selector: 'app-auth',
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    MatCard,
+    MatCardContent,
+    MatCardActions,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatIconModule,
+  ],
   templateUrl: './auth.html',
   styleUrl: './auth.css',
 })

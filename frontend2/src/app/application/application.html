@@ -1,0 +1,39 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <app-user-profile mat-card-avatar [username]="app().about" />
+
+    <mat-card-title>{{app().about}}</mat-card-title>
+    <mat-card-subtitle>#{{app().id}}</mat-card-subtitle>
+    <mat-card-subtitle>
+      {{app().type === 'TOMEMBER'? 'To Member' : 'To Admin'}}
+    </mat-card-subtitle>
+    <mat-card-subtitle>{{app().created | date }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item> Submitter </mat-list-item>
+      <div class="user">
+        <app-user-profile mat-card-avatar [username]="app().submitter" />
+        <label>{{app().submitter}}</label>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-list-item>ds</mat-list-item>
+    </mat-list>
+    <mat-accordion>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Approvers </mat-panel-title>
+          <mat-panel-description>
+            <mat-progress-bar mode="determinate" [value]="approvalPercent()"></mat-progress-bar>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        @for (user of app().voted; track $index) {
+          <div class="user">
+            <app-user-profile mat-card-avatar [username]="user" />
+            <label>{{user}}</label>
+          </div>
+        }
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>

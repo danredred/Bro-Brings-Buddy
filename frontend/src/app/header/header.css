@@ -11,10 +11,6 @@ nav {
 /* Logo or Title */
 nav .logo {
   height: 100%;
-  -webkit-mask-image: url(../../../public/logo-masking.png);
-  mask-image: url(../../../public/logo-masking.png);
-  mask-repeat: no-repeat;
-  mask-size: contain;
 }
 
 /* Navigation Links */

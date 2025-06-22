@@ -1,0 +1,19 @@
+@if(!isAdmin()){
+    @if (myAppliction().length) {
+    <mat-list>
+        @for (application of myAppliction(); track $index) {
+            <mat-list-item>
+                <app-application [app]="application"/>
+            </mat-list-item>
+        }
+    </mat-list>
+    }
+    @else {
+        <p>No one Submitted an application about you</p>
+    }
+}
+@else {
+    <p>
+        dog
+    </p>
+}

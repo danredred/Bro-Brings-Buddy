@@ -1,4 +1,4 @@
-form {
+/* form {
   width: 90%;
   max-width: 40rem;
   margin: 3rem auto;
@@ -71,4 +71,13 @@ button.login{
 input.ng-invalid.ng-touched.ng-dirty {
   background-color: #fbdcd6;
   border-color: #f84e2c;
+} */
+form{
+  width: 90%;
+  max-width: 40rem;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: linear-gradient(180deg, #a0a3a3, #bdc1c1);
+  border-radius: 8px;
+  box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
 }
