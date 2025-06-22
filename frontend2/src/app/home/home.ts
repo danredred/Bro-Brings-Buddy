@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { User } from '../shared/user/user';
 import { ApplicationsList } from '../application/applications-list/applications-list';
+import { Header } from "../header/header";
 
 @Component({
   selector: 'app-home',
@@ -19,8 +20,7 @@ import { ApplicationsList } from '../application/applications-list/applications-
     MatButtonModule,
     MatMenuModule,
     User,
-    ApplicationsList,
-  ],
+],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -68,7 +68,7 @@ export class Home implements OnInit {
       .createApplication(username)
       .subscribe((a) => console.log(a));
   }
-  onApprove(id: string, index: number) {
+  onApprove(id: number, index: number) {
     this.applicationService.approveApplication(+id).subscribe(() => {
       this.applications.update((apps) => {
         apps[index].approvers.push(this.authService.userData()!.username);
@@ -76,7 +76,7 @@ export class Home implements OnInit {
       });
     });
   }
-  onDeapprove(id: string, index: number) {
+  onDeapprove(id: number, index: number) {
     this.applicationService.deapproveApplication(+id).subscribe(() => {
       this.applications.update((apps) => {
         return apps.splice(index,1);

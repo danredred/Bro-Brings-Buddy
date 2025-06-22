@@ -62,7 +62,7 @@
         </div>
       </mat-card-content>
       <mat-card-actions align="end">
-        <button mat-flat-button (click)="onSwitchMode()">{{isLoginMode()? 'Create account' : 'Already have an account'}}</button>
+        <a mat-button (click)="onSwitchMode()">{{isLoginMode()? 'Create account' : 'Already have an account'}}</a>
         <button mat-flat-button type="submit">{{isLoginMode()? 'Login' : 'Sign Up'}}</button>
       </mat-card-actions>
     </mat-card>

@@ -27,7 +27,7 @@ export class ApplicationService implements OnInit {
   getMyApplications() {
     const headers = this.authService.headers();
     return this.httpClient.get<ApplicationData[]>(
-      'http://localhost:3000/applictions/aboutMe',
+      'http://localhost:3000/applictions/about-me',
       {
         headers: headers,
       }

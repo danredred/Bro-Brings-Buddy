@@ -10,7 +10,7 @@ import { Component, computed, input } from '@angular/core';
 export class UserProfile {
   username = input.required<string>();
   userLetter = computed(() => {
-    if (!this.username().length) {
+    if (!this.username()||!this.username().length) {
       // Avoid axcessing index in empty string
       return '🦧';
     }
