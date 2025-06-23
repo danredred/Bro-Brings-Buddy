@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { Auth } from './auth/auth';
 import { Home } from './home/home';
-import { AuthGuard, MiniGameAuthGuard } from './auth/auth.guard';
+import { AdminAuthGuard, AuthGuard, MiniGameAuthGuard } from './auth/auth.guard';
 import { MiniGame } from './mini-game/mini-game';
 import { PeasantGame } from './mini-game/peasant-game/peasant-game';
+import { Admin } from './admin/admin';
 
 export const routes: Routes = [
   {
@@ -34,4 +35,10 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     title: 'Mini Game🎮🙂‍↔️',
   },
+  {
+    path:'Admin',
+    component:Admin,
+    canActivate:[AdminAuthGuard],
+    title: 'Admin Page✅'
+  }
 ];

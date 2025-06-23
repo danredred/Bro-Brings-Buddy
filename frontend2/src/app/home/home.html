@@ -1,3 +1,4 @@
+<img [src]="image()" [alt]="image()">
 @if(!isAdmin()){ @if (myAppliction().length) {
 <mat-list>
   @for (application of myAppliction(); track $index) {
@@ -29,7 +30,4 @@
   </mat-menu>
 </div>
 <!-- <app-applications-list [applications]="applications()"/> -->
-@for (app of applications(); track $index) {
-  <app-application [app]="app" (approve)="onApprove($event,$index)" (deapprove)="onDeapprove($event,$index)"></app-application>
-}
 }

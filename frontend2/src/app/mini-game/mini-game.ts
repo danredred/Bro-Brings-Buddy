@@ -1,4 +1,5 @@
-import { Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mini-game',
@@ -7,6 +8,7 @@ import { Component, ElementRef, signal, ViewChild } from '@angular/core';
   styleUrl: './mini-game.css',
 })
 export class MiniGame {
+  private router = inject(Router)
   score = signal<number>(0);
 
   @ViewChild('screen', { static: false })
@@ -120,7 +122,7 @@ export class MiniGame {
         }
       } else {
         var answer = confirm('Game Over!');
-        if (answer) location.reload();
+        if (answer) this.router.navigate(['/home']);
         clearInterval(id);
       }
     }, 250);

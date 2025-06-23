@@ -35,7 +35,7 @@ export class Home implements OnInit {
   isMember = computed(() => this.authService.userData()?.isMember === true);
   peasants = signal<string[]>([]);
   members = signal<string[]>([]);
-  applications = signal<ApplicationData[]>([]);
+  image = computed(()=>this.isAdmin()?'logo.png':(this.isMember()?'member.png':'peasant.png'))
 
   ngOnInit(): void {
     if (this.authService.userData()?.isAdmin === false) {
@@ -58,9 +58,7 @@ export class Home implements OnInit {
       this.applicationService
         .getUsers('MEMBER')
         .subscribe((users) => this.members.set(users));
-      this.applicationService.getApplications().subscribe((apps) => {
-        this.applications.set(apps.sort((a, b) => +a.closed - +b.closed));
-      });
+
     }
   }
   onSubmitUser(username: string) {
@@ -68,19 +66,5 @@ export class Home implements OnInit {
       .createApplication(username)
       .subscribe((a) => console.log(a));
   }
-  onApprove(id: number, index: number) {
-    this.applicationService.approveApplication(+id).subscribe(() => {
-      this.applications.update((apps) => {
-        apps[index].approvers.push(this.authService.userData()!.username);
-        return apps;
-      });
-    });
-  }
-  onDeapprove(id: number, index: number) {
-    this.applicationService.deapproveApplication(+id).subscribe(() => {
-      this.applications.update((apps) => {
-        return apps.splice(index,1);
-      });
-    });
-  }
+
 }
