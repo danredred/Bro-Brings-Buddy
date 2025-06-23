@@ -25,7 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressBarModule,
     User,
     MatButton,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './application.html',
   styleUrl: './application.css',
@@ -36,20 +36,25 @@ export class Application {
     private authService: AuthService
   ) {}
   app = input.required<ApplicationData>();
-  approve = output<number>();
-  deapprove = output<number>();
+  action = output<{ id: number; action: 'APROVE' | 'DEAPROVE' | 'CLOSE' }>();
   isAdmin = computed(() => this.authService.userData()?.isAdmin === true);
+  isSubmitter = computed(
+    () => this.app().submitter === this.authService.userData()?.username
+  );
   isAproving = computed(() => {
     const username = this.authService.userData()?.username;
     if (!username) return false;
     return this.app().approvers.includes(username);
   });
   approvalPercent = computed(() => {
-    const required =
-      this.app().type === 'TOMEMBER' ? 2 : this.applicationService.adminCount;
-    if (required) {
-      return (100 * this.app().approvers.length) / required;
+    if (
+      this.applicationService.adminCount < 2 ||
+      this.app().type === 'TOMEMBER'
+    ) {
+      return (100 * this.app().approvers.length) / 2;
     }
-    return (100 * this.app().approvers.length) / 2;
+    return (
+      (100 * this.app().approvers.length) / this.applicationService.adminCount
+    );
   });
 }

@@ -1,4 +1,4 @@
-<mat-card class="application" appearance="outlined">
+<mat-card [class]="`application' ${app().closed?'closed':'open'}`" appearance="outlined">
   <mat-card-header>
     <app-user-profile mat-card-avatar [username]="app().about" />
 
@@ -9,13 +9,12 @@
     </mat-card-subtitle>
     <mat-card-subtitle>{{app().created | date }}</mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
-    <mat-list>
-      <mat-list-item> Submitter </mat-list-item>
+  <mat-card-content class="card-content">
+    <div class="row-contianer">
+      <label>Submitter</label>
       <app-user [username]="app().submitter" />
-      <mat-divider></mat-divider>
-      <mat-list-item></mat-list-item>
-    </mat-list>
+    </div>
+
     <mat-accordion>
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
@@ -33,11 +32,24 @@
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
-  @if(isAdmin()){
+  @if(!app().closed && (isAdmin()||isSubmitter())){
   <mat-card-actions>
-    <button matButton (click)="((isAproving())?deapprove:approve).emit(app().id)">
+    @if(isAdmin()){
+    <button
+      matButton
+      (click)="action.emit({id:app().id,action:(isAproving()?'DEAPROVE':'APROVE')})"
+    >
       {{(isAproving())?'❌':'✅'}}
+    </button>}
+    @if(isSubmitter()){
+      <button
+      matButton
+      (click)="action.emit({id:app().id,action:'CLOSE'})"
+    >
+      🗑️
     </button>
+    }
+
   </mat-card-actions>
   }
 </mat-card>

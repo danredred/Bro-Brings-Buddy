@@ -3,6 +3,7 @@ import { AuthService } from '../auth/auth.service';
 import { ApplicationService } from '../application/application.service';
 import { Application } from '../application/application';
 import { ApplicationData } from '../application/applicationData.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-admin',
@@ -15,25 +16,40 @@ export class Admin implements OnInit {
   constructor(
     private authService: AuthService,
     private applicationService: ApplicationService,
+    private readonly snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
-    this.applicationService.getApplications().subscribe((apps) => {
-      this.applications.set(apps.sort((a, b) => +a.closed - +b.closed));
-    });
+    this.applicationService.getApplications().subscribe(
+      (apps) => {
+        this.applications.set(apps.sort((a, b) => +a.closed - +b.closed));
+      },
+      (error) => this.snackBar.open(error, 'Dismiss', { duration: 5000 })
+    );
   }
-  onApprove(id: number, index: number) {
-    this.applicationService.approveApplication(+id).subscribe(() => {
-      this.applications.update((apps) => {
-        apps[index].approvers.push(this.authService.userData()!.username);
-        return apps;
-      });
-    });
-  }
-  onDeapprove(id: number, index: number) {
-    this.applicationService.deapproveApplication(+id).subscribe(() => {
-      this.applications.update((apps) => {
-        return apps.splice(index, 1);
-      });
-    });
+  onAction(
+    data: { id: number; action: 'APROVE' | 'DEAPROVE' | 'CLOSE' },
+    index: number
+  ) {
+    let requesting;
+    switch (data.action) {
+      case 'APROVE':
+        requesting = this.applicationService.approveApplication(data.id);
+        break;
+      case 'DEAPROVE':
+        requesting = this.applicationService.deapproveApplication(data.id);
+        break;
+      case 'CLOSE':
+        requesting = this.applicationService.closeApplication(data.id);
+        break;
+    }
+    requesting.subscribe(
+      (app) => {
+        this.applications.update((apps) => {
+          apps[index] = app;
+          return [...apps];
+        });
+      },
+      (error) => this.snackBar.open(error, 'Dismiss', { duration: 5000 })
+    );
   }
 }
