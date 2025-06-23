@@ -1,33 +1,48 @@
-<img [src]="image()" [alt]="image()">
-@if(!isAdmin()){ @if (myAppliction().length) {
-<mat-list>
-  @for (application of myAppliction(); track $index) {
-  <mat-list-item>
-    <app-application [app]="application" />
-  </mat-list-item>  
+<mat-grid-list cols="4">
+  <mat-grid-tile colspan="1" rowspan="3">
+    <img [src]="image()" [alt]="image()" />
+  </mat-grid-tile>
+  @if(isMember()||isAdmin()){
+  <mat-grid-tile>
+    <mat-grid-tile-header>Submit for a peasant</mat-grid-tile-header>
+    <button mat-raised-button [matMenuTriggerFor]="menu">
+      Member Submition
+    </button>
+    <mat-menu #menu="matMenu">
+      @for (user of peasants(); track $index) {
+      <button (click)="onSubmitUser(user)" mat-menu-item>
+        <app-user [username]="user" />
+      </button>
+      }
+    </mat-menu> </mat-grid-tile
+  >} @if (isAdmin()) {
+  <mat-grid-tile>
+    <mat-grid-tile-header>Submit for a member</mat-grid-tile-header>
+    <button mat-raised-button [matMenuTriggerFor]="menu">
+      Admin Submition
+    </button>
+    <mat-menu #menu="matMenu">
+      @for (user of members(); track $index) {
+      <button (click)="onSubmitUser(user)" mat-menu-item>
+        <app-user [username]="user" />
+      </button>
+      }
+    </mat-menu>
+  </mat-grid-tile>
+  } @if(!isAdmin()){
+  <mat-grid-tile rowspan="3" colspan="2">
+    <mat-grid-tile-header>Applictions About Me</mat-grid-tile-header>
+    @if (myAppliction().length) {
+    <div class="col-list">
+      @for (application of myAppliction(); track $index) { @if($index){
+      <mat-divider></mat-divider>
+      }
+      <app-application class="application" [app]="application" />
+      }
+    </div>
+    } @else {
+    <p>No one Submitted an application about you</p>
+    }
+  </mat-grid-tile>
   }
-</mat-list>
-} @else {
-<p>No one Submitted an application about you</p>
-} } @if(isMember()||isAdmin()){
-<div>
-  <title>Submit for a peasant</title>
-  <button matButton [matMenuTriggerFor]="menu">Member Submition</button>
-  <mat-menu #menu="matMenu">
-    @for (user of peasants(); track $index) {
-    <button (click)="onSubmitUser(user)" mat-menu-item><app-user [username]="user" /></button>
-    }
-  </mat-menu>
-</div>
-} @if (isAdmin()) {
-<div>
-  <title>Submit for a member</title>
-  <button matButton [matMenuTriggerFor]="menu">Admin Submition</button>
-  <mat-menu #menu="matMenu">
-    @for (user of members(); track $index) {
-        <button (click)="onSubmitUser(user)" mat-menu-item> <app-user [username]="user" /></button>
-    }
-  </mat-menu>
-</div>
-<!-- <app-applications-list [applications]="applications()"/> -->
-}
+</mat-grid-list>

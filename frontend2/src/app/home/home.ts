@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { User } from '../shared/user/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 
@@ -21,6 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatButtonModule,
     MatMenuModule,
     User,
+    MatGridListModule
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',

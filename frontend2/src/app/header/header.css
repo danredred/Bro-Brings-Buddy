@@ -7,3 +7,8 @@
        content */
     background: #eee;
   }
+
+.user{
+   display: flex;
+   flex-direction: row;
+}

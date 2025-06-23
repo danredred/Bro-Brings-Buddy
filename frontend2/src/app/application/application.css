@@ -1,5 +1,5 @@
 .application{
-    max-width: 600px;
+    min-width: 600px;
 }
 
 .open{
@@ -8,8 +8,8 @@
 }
 
 .closed{
-    background-color: gold;
-    border-color: goldenrod;
+    background-color: rgb(218, 154, 141);
+    border-color: rgb(156, 104, 94);
 }
 
 .row-contianer{

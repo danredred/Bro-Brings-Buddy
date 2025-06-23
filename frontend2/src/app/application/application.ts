@@ -46,15 +46,14 @@ export class Application {
     if (!username) return false;
     return this.app().approvers.includes(username);
   });
-  approvalPercent = computed(() => {
+  approveCount = computed(() => this.app().approvers.length);
+  approvalNeeded = computed(() => {
     if (
       this.applicationService.adminCount < 2 ||
       this.app().type === 'TOMEMBER'
     ) {
-      return (100 * this.app().approvers.length) / 2;
+      return 2;
     }
-    return (
-      (100 * this.app().approvers.length) / this.applicationService.adminCount
-    );
+    return this.applicationService.adminCount;
   });
 }

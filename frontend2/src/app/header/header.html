@@ -28,7 +28,7 @@
         </div>
         @if (app()) {
 
-        <div class="flex items-center gap-2 ml-auto">
+        <div class="flex items-center gap-2 ml-auto user">
           <button
             mat-icon-button
             [matMenuTriggerFor]="userMenu"
@@ -39,8 +39,9 @@
               [username]="app()!.username"
               class="size-8! rounded-full object-cover"
             />
-            <label>{{app()!.username}}</label>
+            
           </button>
+          <label>{{app()!.username}}</label>
         </div>
         }
       </div>

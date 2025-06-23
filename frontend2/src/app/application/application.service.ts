@@ -102,9 +102,13 @@ export class ApplicationService implements OnInit {
   }
 
   errorHandler(errorRes: HttpErrorResponse) {
-    let message = errorRes.message;
+    let message = 'An unknown message occurred!';
     console.log(errorRes);
-    switch (errorRes.statusText) {
+    if (!errorRes.error || !errorRes.error.error) {
+      return throwError(message);
+    }
+
+    switch (errorRes.error.error) {
       case 'Forbidden':
         // this.authService.logout();
         window.location.reload();
@@ -112,6 +116,9 @@ export class ApplicationService implements OnInit {
         break;
       case 'Unknown Error':
         message = 'An unknown message occurred!';
+        break;
+      default:
+        message = errorRes.error.message
     }
     return throwError(message);
   }
