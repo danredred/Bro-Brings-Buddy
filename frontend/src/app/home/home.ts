@@ -57,15 +57,14 @@ export class Home implements OnInit {
     if (
       this.authService.userData()?.isMember ||
       this.authService.userData()?.isAdmin
-    ) {
+    ) {  // if Member or Admin update the peasants list
       this.applicationService.getUsers('PEASANT').subscribe(
         (users) => {
-          console.log(users);
           this.peasants.set(users);
         },
         (error) => this.errorMessage(error)
       );
-    }
+    } //if member update the members list
     if (this.authService.userData()?.isAdmin) {
       this.applicationService.getUsers('MEMBER').subscribe(
         (users) => this.members.set(users),

@@ -44,7 +44,7 @@ export class Admin implements OnInit {
         break;
     }
     requesting.subscribe(
-      (app) => {
+      (app) => {  // updatet the applications
         this.applications.update((apps) => {
           apps[index] = app;
           return [...apps];

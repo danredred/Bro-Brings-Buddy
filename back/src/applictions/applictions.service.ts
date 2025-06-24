@@ -45,7 +45,7 @@ export class ApplictionsService {
         submitterUser: true,
       },
     });
-    //console.log(applictions);
+    // create a return compatable array
     let ret: ApplicationReturnData[] = [];
     for (let app of applictions.values()) {
       ret.push(formatForReturn(app));
@@ -59,9 +59,10 @@ export class ApplictionsService {
     });
     if (aboutUser === null) {
       throw new NotFoundException(
-        'Target user is missing. Try to search for him or call 911',
+        'Target user is missing. Try to search for him',
       );
     } else if (
+      // Check if user already have an application
       (
         await this.databaseService.application.findMany({
           where: { aboutUserId: aboutUser.id, status: 'PENDING' },
@@ -92,6 +93,8 @@ export class ApplictionsService {
       type: type,
       approvingUsers: { connect: submitterUser },
     };
+
+    // create in the DB
     const app = await this.databaseService.application.create({
       data: application,
       include: {
@@ -113,6 +116,7 @@ export class ApplictionsService {
         submitterUser: true,
       },
     });
+    // create a return compatable array
     let ret: ApplicationReturnData[] = [];
     for (let app of applications.values()) {
       ret.push(formatForReturn(app));
@@ -127,10 +131,13 @@ export class ApplictionsService {
       throw new ConflictException('You already aproved this');
     }
 
+    //update the application
     await this.databaseService.application.update({
       where: { id: applicationId },
       data: { approvingUsers: { connect: { id: user.id } } },
     });
+
+    // call the checking function
     await this.checkAprovales(applicationId);
     return formatForReturn(
       await this.databaseService.application.findUnique({
@@ -150,7 +157,7 @@ export class ApplictionsService {
     if (!app.approvingUsers.filter((userA) => userA.id === user.id).length) {
       throw new ConflictException("You didn't aprove");
     }
-
+    
     return formatForReturn(
       await this.databaseService.application.update({
         where: { id: applicationId },

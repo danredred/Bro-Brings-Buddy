@@ -67,7 +67,6 @@ export class Auth {
     }
     const subscription = authObs.subscribe({
       next: (value) => {
-        console.log(value);
         this.router.navigate(['home']);
       },
       error: (error) => {

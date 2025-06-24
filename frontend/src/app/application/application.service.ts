@@ -28,7 +28,10 @@ export class ApplicationService implements OnInit {
       .get<ApplicationData[]>('http://localhost:3000/applictions/about-me', {
         headers: headers,
       })
-      .pipe(catchError(this.errorHandler),tap(apps=>apps.sort((a, b) => b.id - a.id)));
+      .pipe(
+        catchError(this.errorHandler),
+        tap((apps) => apps.sort((a, b) => b.id - a.id))
+      );
   }
 
   getUsers(permission?: 'ADMIN' | 'MEMBER' | 'PEASANT') {
@@ -49,12 +52,14 @@ export class ApplicationService implements OnInit {
       .get<ApplicationData[]>('http://localhost:3000/applictions/', {
         headers: headers,
       })
-      .pipe(catchError(this.errorHandler),tap(apps=>apps.sort((a, b) => b.id - a.id)));
+      .pipe(
+        catchError(this.errorHandler),
+        tap((apps) => apps.sort((a, b) => b.id - a.id))
+      );
   }
 
   createApplication(username: string) {
     const headers = this.authService.headers();
-    console.log(headers);
     return this.httpClient
       .post<ApplicationData>(
         `http://localhost:3000/applictions/${username}`,
@@ -68,7 +73,6 @@ export class ApplicationService implements OnInit {
 
   approveApplication(id: number) {
     const headers = this.authService.headers();
-    console.log(headers);
     return this.httpClient
       .post<ApplicationData>(
         `http://localhost:3000/applictions/approve/${id}`,
@@ -79,9 +83,9 @@ export class ApplicationService implements OnInit {
       )
       .pipe(catchError(this.errorHandler));
   }
+
   deapproveApplication(id: number) {
     const headers = this.authService.headers();
-    console.log(headers);
     return this.httpClient
       .delete<ApplicationData>(
         `http://localhost:3000/applictions/approve/${id}`,
@@ -91,9 +95,9 @@ export class ApplicationService implements OnInit {
       )
       .pipe(catchError(this.errorHandler));
   }
+  
   closeApplication(id: number) {
     const headers = this.authService.headers();
-    console.log(headers);
     return this.httpClient
       .delete<ApplicationData>(`http://localhost:3000/applictions/${id}`, {
         headers: headers,
@@ -103,7 +107,6 @@ export class ApplicationService implements OnInit {
 
   errorHandler(errorRes: HttpErrorResponse) {
     let message = 'An unknown message occurred!';
-    console.log(errorRes);
     if (!errorRes.error || !errorRes.error.error) {
       return throwError(message);
     }
@@ -118,7 +121,7 @@ export class ApplicationService implements OnInit {
         message = 'An unknown message occurred!';
         break;
       default:
-        message = errorRes.error.message
+        message = errorRes.error.message;
     }
     return throwError(message);
   }

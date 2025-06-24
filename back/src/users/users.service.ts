@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { Permission, Prisma } from 'generated/prisma';
@@ -14,6 +15,8 @@ export interface AuthToken {
   token: string;
   expirationDate: Date;
 }
+
+const forbiddenNames = ['approve/', '🦧', 'king', 'popo']
 
 @Injectable()
 export class UsersService {
@@ -35,6 +38,13 @@ export class UsersService {
       );
       throw new ConflictException('USERNAME_EXSITS');
     }
+  
+    for(let name of forbiddenNames.values()){
+      if (userAuthDto.username.toLowerCase().includes(name)) {
+        throw new NotAcceptableException('USERNAME_BAD')
+      }
+    }
+
     // create a DTO with hashed password
     const createUserDto: Prisma.UserCreateInput = {
       username: userAuthDto.username,

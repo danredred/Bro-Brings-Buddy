@@ -61,7 +61,7 @@ export class AuthService implements OnModuleDestroy {
         username + Date.now() + expirationDate.toDateString + userId,
       ),
     );
-    this.tokens = this.tokens.filter((t)=>t.userId!==userId);
+    this.tokens = this.tokens.filter((t) => t.userId !== userId);
     this.tokens.push({ token, expirationDate, userId }); // Add the token to the list
     console.log({ permission, token, expiresIn: tokenValidTime, username });
     return { permission, token, expiresIn: tokenValidTime, username };
@@ -69,15 +69,16 @@ export class AuthService implements OnModuleDestroy {
 
   async checkValidToken(token: string) {
     const id = this.tokens.find(
-      (t) => (t.token === token) && (t.expirationDate > new Date()),
+      (t) => t.token === token && t.expirationDate > new Date(),
     )?.userId;
-    if (id===undefined) return false;
+    if (id === undefined) return false;
     return (
       (await this.databaseService.user.findUnique({ where: { id } })) !== null
     );
   }
+
   getUserId(token: string) {
-    const p = this.tokens.find((t) => t.token == token)
-    return  this.tokens.find((t) => t.token == token)?.userId;
+    const p = this.tokens.find((t) => t.token == token);
+    return this.tokens.find((t) => t.token == token)?.userId;
   }
 }

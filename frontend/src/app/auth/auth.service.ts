@@ -46,7 +46,6 @@ export class AuthService {
         catchError(this.handleError),
         tap({
           next: (resData) => {
-            console.log('🐶');
             const expirationDate = new Date(
               Date.now() + resData.expiresIn * 1000
             );
@@ -65,7 +64,6 @@ export class AuthService {
 
   logout() {
     this.user.set(undefined);
-    console.log('Logout')
     this.router.navigate(['/auth']);
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
@@ -92,6 +90,9 @@ export class AuthService {
         break;
       case 'INVALID_USER_CREDENTIAL':
         errorMessage = 'Username or password incorect.🙂‍↔️';
+        break;
+      case 'USERNAME_BAD':
+        errorMessage = 'Stop being evil! Your username is bad!'
     }
     return throwError(errorMessage);
   }
