@@ -1,6 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { ApplicationService } from '../application/application.service';
+import { ApplicationService, applicationSorter } from '../application/application.service';
 import { Application } from '../application/application';
 import { ApplicationData } from '../application/applicationData.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,7 +13,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   styleUrl: './admin.css',
 })
 export class Admin implements OnInit {
-  applications = signal<ApplicationData[]>([]);
+  private applications = signal<ApplicationData[]>([]);
+  applicationShower = computed(()=>this.applications().sort(applicationSorter))
   constructor(
     private authService: AuthService,
     private applicationService: ApplicationService,
@@ -22,7 +23,7 @@ export class Admin implements OnInit {
   ngOnInit(): void {
     this.applicationService.getApplications().subscribe(
       (apps) => {
-        this.applications.set(apps.sort((a, b) => b.id - a.id));
+        this.applications.set(apps);
       },
       (error) => this.snackBar.open(error, 'Dismiss', { duration: 5000 })
     );

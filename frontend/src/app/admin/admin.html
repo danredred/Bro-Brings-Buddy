@@ -1,5 +1,5 @@
 <cdk-virtual-scroll-viewport itemSize="600px" class="scroll-view" style="height: 100%;">
-  @for (app of applications(); track $index) {
+  @for (app of applicationShower(); track app.id) {
     <app-application [app]="app" [allowVotes]="true" (action)="onAction($event,$index)"></app-application>
   }
 </cdk-virtual-scroll-viewport>

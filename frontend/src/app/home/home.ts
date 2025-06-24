@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, OnInit, signal } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { ApplicationService } from '../application/application.service';
+import { ApplicationService, applicationSorter } from '../application/application.service';
 import { ApplicationData } from '../application/applicationData.model';
 import { MatListModule } from '@angular/material/list';
 import { Application } from '../application/application';
@@ -34,7 +34,8 @@ export class Home implements OnInit {
     private destroyRef: DestroyRef,
     readonly snackbar: MatSnackBar
   ) {}
-  myAppliction = signal<ApplicationData[]>([]);
+  private myApplictions = signal<ApplicationData[]>([]);
+  applications = computed(()=>this.myApplictions().sort(applicationSorter))
   isAdmin = computed(() => this.authService.userData()?.isAdmin === true);
   isMember = computed(() => this.authService.userData()?.isMember === true);
   peasants = signal<string[]>([]);
@@ -46,7 +47,7 @@ export class Home implements OnInit {
   ngOnInit(): void {
     // get my applications
     const subscription = this.applicationService.getMyApplications().subscribe(
-      (apps) => this.myAppliction.set(apps),
+      (apps) => this.myApplictions.set(apps),
       (error) => this.errorMessage(error)
     );
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
@@ -76,7 +77,7 @@ export class Home implements OnInit {
   onSubmitUser(username: string) {
     this.applicationService.createApplication(username).subscribe(
       (app) =>
-        this.myAppliction.update((a) => {
+        this.myApplictions.update((a) => {
           this.getUsers();
           return [app, ...a];
         }),
@@ -88,12 +89,12 @@ export class Home implements OnInit {
   }
   onCloseApp(id: number, index: number) {
     this.applicationService.closeApplication(id).subscribe(
-      (app) =>
-        this.myAppliction.update((a) => {
-          this.getUsers()
+      (app) =>{
+        this.getUsers();
+        this.myApplictions.update((a) => {
           a[index] = app;
           return [...a];
-        }),
+        })},
       (error) => this.errorMessage(error)
     );
   }

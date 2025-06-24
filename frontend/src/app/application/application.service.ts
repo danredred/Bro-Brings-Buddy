@@ -4,26 +4,32 @@ import { AuthService } from '../auth/auth.service';
 import { catchError, tap, throwError } from 'rxjs';
 import { ApplicationData } from './applicationData.model';
 
+export function applicationSorter(a: ApplicationData, b: ApplicationData) {
+  const pend = +(b.status === 'PENDING') - +(a.status === 'PENDING');
+  if (!pend) {  // the sorting by Status is stronger!
+    return b.id - a.id;
+  }
+  return pend;
+}
+
 @Injectable({
   providedIn: 'root',
 })
-export class ApplicationService{
+export class ApplicationService {
   adminCount: number = 0;
   constructor(
     private httpClient: HttpClient,
     private authService: AuthService,
     private destroyRef: DestroyRef
   ) {
-    console.log('🤠')
+    console.log('🤠');
     const subscription = this.getUsers('ADMIN').subscribe(
       (admins) => (this.adminCount = admins.length)
     );
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
   getMyApplications() {
     const headers = this.authService.headers();
@@ -33,7 +39,7 @@ export class ApplicationService{
       })
       .pipe(
         catchError(this.errorHandler),
-        tap((apps) => apps.sort((a, b) => b.id - a.id))
+        tap((apps) => apps.sort(applicationSorter))
       );
   }
 
@@ -57,7 +63,7 @@ export class ApplicationService{
       })
       .pipe(
         catchError(this.errorHandler),
-        tap((apps) => apps.sort((a, b) => b.id - a.id))
+        tap((apps) => apps.sort(applicationSorter))
       );
   }
 
@@ -98,7 +104,7 @@ export class ApplicationService{
       )
       .pipe(catchError(this.errorHandler));
   }
-  
+
   closeApplication(id: number) {
     const headers = this.authService.headers();
     return this.httpClient

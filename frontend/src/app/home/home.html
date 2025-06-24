@@ -33,9 +33,9 @@
     }
     <mat-grid-tile class="apps" [rowspan]="(isAdmin()?3:4)" colspan="2">
       <mat-grid-tile-header>Applictions Related to Me</mat-grid-tile-header>
-      @if (myAppliction().length) {
+      @if (applications().length) {
       <cdk-virtual-scroll-viewport itemSize="600px" class="viewport scroll-view">
-        @for (application of myAppliction(); track $index) { @if($index){
+        @for (application of applications(); track application.id) { @if($index){
         <mat-divider style="padding-bottom: 5px;"/>
         }
 
