@@ -1,26 +1,29 @@
-.application{
-    min-width: 600px;
+.application {
+  min-width: 300px;
+  background-color: rgb(228, 228, 228);
+  border-color: rgb(161, 161, 161);
 }
 
-.open{
-    background-color: #84b084;
-    border-color: rgb(101, 116, 75)
+
+.approved {
+  background-color: #84b084 !important;
+  border-color: rgb(101, 116, 75) !important;
 }
 
-.closed{
-    background-color: rgb(218, 154, 141);
-    border-color: rgb(156, 104, 94);
+.closed {
+  background-color: rgb(218, 154, 141) !important;
+  border-color: rgb(156, 104, 94) !important;
 }
 
-.row-contianer{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
-    align-items: center;
+.row-contianer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
 }
 
-.card-content{
-    gap: 20px;
-    margin: 10px;
+.card-content {
+  gap: 20px;
+  margin: 10px;
 }

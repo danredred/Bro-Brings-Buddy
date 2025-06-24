@@ -3,7 +3,7 @@ export interface ApplicationData {
   submitter: string;
   approvers: string[];
   type: 'TOADMIN' | 'TOMEMBER';
-  closed: boolean;
+  status: 'PENDING' | 'CLOSED' | 'APPROVED';
   about: string;
   created: Date;
 }

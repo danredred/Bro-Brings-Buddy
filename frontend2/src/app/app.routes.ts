@@ -15,7 +15,7 @@ export const routes: Routes = [
   {
     path: 'auth',
     component: Auth,
-    title: 'Login🪵',
+    title: '🪵in',
   },
   {
     path: 'home',
@@ -33,12 +33,12 @@ export const routes: Routes = [
     path: 'peasant-game',
     component: PeasantGame,
     canActivate: [AuthGuard],
-    title: 'Mini Game🎮🙂‍↔️',
+    title: 'Mimi Game🎮🙂‍↔️',
   },
   {
-    path:'Admin',
-    component:Admin,
-    canActivate:[AdminAuthGuard],
-    title: 'Admin Page✅'
-  }
+    path: 'Admin',
+    component: Admin,
+    canActivate: [AdminAuthGuard],
+    title: 'Admin Page✅',
+  },
 ];

@@ -1,11 +1,14 @@
-<mat-card [class]="`application' ${app().closed?'closed':'open'}`" appearance="outlined">
+<mat-card
+  [class]="`application ${app().status.toLowerCase()}`"
+  appearance="outlined"
+>
   <mat-card-header>
     <app-user-profile mat-card-avatar [username]="app().about" />
 
     <mat-card-title>{{app().about}}</mat-card-title>
     <mat-card-subtitle>#{{app().id}}</mat-card-subtitle>
-    
-    <mat-card-subtitle>{{app().closed?'Closed':'Open'}}</mat-card-subtitle>
+
+    <mat-card-subtitle>{{app().status.toLowerCase()}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content class="card-content">
     <mat-card-subtitle>
@@ -22,13 +25,14 @@
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title> Approvers </mat-panel-title>
+          @if(app().status==='PENDING'){
           <mat-panel-description [style.gap]="'3px'">
             <label>{{approveCount()}}/{{approvalNeeded()}}</label>
             <mat-progress-bar
               mode="determinate"
               [value]="100*approveCount()/approvalNeeded()"
-            ></mat-progress-bar>
-          </mat-panel-description>
+            ></mat-progress-bar> </mat-panel-description
+          >}
         </mat-expansion-panel-header>
         @for (user of app().approvers; track $index) {
         <app-user [username]="user" />
@@ -36,24 +40,19 @@
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
-  @if(!app().closed && (isAdmin()||isSubmitter())){
+  @if(app().status==='PENDING' && (isAdmin()||isSubmitter())){
   <mat-card-actions>
-    @if(isAdmin()){
+    @if(allowVotes() && isAdmin()){
     <button
       matButton
       (click)="action.emit({id:app().id,action:(isAproving()?'DEAPROVE':'APROVE')})"
     >
-      {{(isAproving())?'❌':'✅'}}
-    </button>}
-    @if(isSubmitter()){
-      <button
-      matButton
-      (click)="action.emit({id:app().id,action:'CLOSE'})"
-    >
+      {{(isAproving())?'❌':'✅'}}</button
+    >} @if(isSubmitter()){
+    <button matButton (click)="action.emit({id:app().id,action:'CLOSE'})">
       🗑️
     </button>
     }
-
   </mat-card-actions>
   }
 </mat-card>

@@ -18,12 +18,12 @@
               <mat-label>Username</mat-label>
               <input matInput type="username" formControlName="username" />
               @if (
-                (form.get('email')?.touched || form.get('email')?.dirty) &&
-                form.get('email')?.hasError('required')
+                (form.get('username')?.touched || form.get('username')?.dirty) &&
+                form.get('username')?.hasError('required')
               ) {
                 <mat-error>
                   <mat-icon class="form-field-error-icon">error</mat-icon>
-                  Email is required</mat-error
+                  Username is required</mat-error
                 >
               }
               @if (
@@ -32,7 +32,7 @@
               ) {
                 <mat-error>
                   <mat-icon class="form-field-error-icon">error</mat-icon>
-                  Email is invalid
+                  Username is invalid
                 </mat-error>
               }
             </mat-form-field>
@@ -54,7 +54,7 @@
               ) {
                 <mat-error>
                   <mat-icon class="form-field-error-icon">error</mat-icon>
-                  Password must be at least 6 characters
+                  Password must be 6 to 16 characters
                 </mat-error>
               }
             </mat-form-field>

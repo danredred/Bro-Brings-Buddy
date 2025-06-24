@@ -4,10 +4,11 @@ import { ApplicationService } from '../application/application.service';
 import { Application } from '../application/application';
 import { ApplicationData } from '../application/applicationData.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-admin',
-  imports: [Application],
+  imports: [Application, ScrollingModule],
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })
@@ -16,12 +17,12 @@ export class Admin implements OnInit {
   constructor(
     private authService: AuthService,
     private applicationService: ApplicationService,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
   ) {}
   ngOnInit(): void {
     this.applicationService.getApplications().subscribe(
       (apps) => {
-        this.applications.set(apps.sort((a, b) => +a.closed - +b.closed));
+        this.applications.set(apps.sort((a, b) => b.id - a.id));
       },
       (error) => this.snackBar.open(error, 'Dismiss', { duration: 5000 })
     );

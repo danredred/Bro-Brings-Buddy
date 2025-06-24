@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,14 +7,16 @@ import { Router } from '@angular/router';
   templateUrl: './mini-game.html',
   styleUrl: './mini-game.css',
 })
-export class MiniGame {
+export class MiniGame implements AfterViewInit,OnDestroy {
   private router = inject(Router)
+  private isViewed = false
   score = signal<number>(0);
 
   @ViewChild('screen', { static: false })
   canvas!: ElementRef;
 
   ngAfterViewInit() {
+    this.isViewed = true
     let ctx = this.canvas.nativeElement.getContext('2d');
 
     let gameOver: boolean = false;
@@ -106,6 +108,10 @@ export class MiniGame {
     }
     createFood();
     let id = setInterval(() => {
+      if(!this.isViewed){
+        clearInterval(id);
+        return
+      }
       if (!gameOver) {
         window.addEventListener('keydown', changeDirection);
         checkGameOver();
@@ -126,5 +132,8 @@ export class MiniGame {
         clearInterval(id);
       }
     }, 250);
+  }
+  ngOnDestroy(): void {
+    this.isViewed=false
   }
 }

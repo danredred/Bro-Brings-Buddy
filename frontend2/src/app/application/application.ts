@@ -36,6 +36,7 @@ export class Application {
     private authService: AuthService
   ) {}
   app = input.required<ApplicationData>();
+  allowVotes = input<boolean>(false);
   action = output<{ id: number; action: 'APROVE' | 'DEAPROVE' | 'CLOSE' }>();
   isAdmin = computed(() => this.authService.userData()?.isAdmin === true);
   isSubmitter = computed(

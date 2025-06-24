@@ -10,8 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { User } from '../shared/user/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatGridListModule } from '@angular/material/grid-list';
-
-
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +21,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatButtonModule,
     MatMenuModule,
     User,
-    MatGridListModule
+    MatGridListModule,
+    ScrollingModule
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -44,16 +44,16 @@ export class Home implements OnInit {
   );
 
   ngOnInit(): void {
-    if (this.authService.userData()?.isAdmin === false) {
-      // get my applications
-      const subscription = this.applicationService
-        .getMyApplications()
-        .subscribe(
-          (apps) => this.myAppliction.set(apps),
-          (error) => this.errorMessage(error)
-        );
-      this.destroyRef.onDestroy(() => subscription.unsubscribe());
-    }
+    // get my applications
+    const subscription = this.applicationService.getMyApplications().subscribe(
+      (apps) => this.myAppliction.set(apps),
+      (error) => this.errorMessage(error)
+    );
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
+    this.getUsers();
+  }
+
+  private getUsers() {
     if (
       this.authService.userData()?.isMember ||
       this.authService.userData()?.isAdmin
@@ -73,13 +73,28 @@ export class Home implements OnInit {
       );
     }
   }
+
   onSubmitUser(username: string) {
     this.applicationService.createApplication(username).subscribe(
-      (app) => console.log(app),
+      (app) =>
+        this.myAppliction.update((a) => {
+          this.getUsers();
+          return [app, ...a];
+        }),
       (error) => this.errorMessage(error)
     );
   }
   errorMessage(error: string) {
-    this.snackbar.open(error,'OK')
+    this.snackbar.open(error, 'OK');
+  }
+  onCloseApp(id: number, index: number) {
+    this.applicationService.closeApplication(id).subscribe(
+      (app) =>
+        this.myAppliction.update((a) => {
+          a[index] = app;
+          return [...a];
+        }),
+      (error) => this.errorMessage(error)
+    );
   }
 }

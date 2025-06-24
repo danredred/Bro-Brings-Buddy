@@ -28,7 +28,7 @@ export class ApplicationService implements OnInit {
       .get<ApplicationData[]>('http://localhost:3000/applictions/about-me', {
         headers: headers,
       })
-      .pipe(catchError(this.errorHandler));
+      .pipe(catchError(this.errorHandler),tap(apps=>apps.sort((a, b) => b.id - a.id)));
   }
 
   getUsers(permission?: 'ADMIN' | 'MEMBER' | 'PEASANT') {
@@ -36,7 +36,7 @@ export class ApplicationService implements OnInit {
     return this.httpClient
       .get<string[]>(
         'http://localhost:3000/users' +
-          (permission ? `?permission=${permission}` : ''),
+          (permission ? `?noapplication=true&permission=${permission}` : ''),
         {
           headers: headers,
         }
@@ -49,7 +49,7 @@ export class ApplicationService implements OnInit {
       .get<ApplicationData[]>('http://localhost:3000/applictions/', {
         headers: headers,
       })
-      .pipe(catchError(this.errorHandler));
+      .pipe(catchError(this.errorHandler),tap(apps=>apps.sort((a, b) => b.id - a.id)));
   }
 
   createApplication(username: string) {
