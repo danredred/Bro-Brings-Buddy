@@ -32,13 +32,15 @@ $ npm install
 ```
 
 ### DB setup
+
 For the project to work proparly you need to [setup the DB](#creating-a-db).
 
-You need to connect the DB to *prisma* by setting the `DATABASE_URL` in the [*.env*](.env) to the DB's API key. For example:
+You need to connect the DB to _prisma_ by setting the `DATABASE_URL` in the [_.env_](.env) to the DB's API key. For example:
 
 ```Properties
 DATABASE_URL="postgres://postgres:123456@localhost:5432/BroBringsBody"
 ```
+
 After that you need to migrate the prisma tables to the DB, simply run:
 
 ```bash
@@ -46,8 +48,15 @@ $ npx prisma migrate dev -n init
 ```
 
 #### Creating a DB
-You can first try using prisma to create the 
 
+We can create a postgreSQL server for this example. [Download](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) PostgreSQL if not installed and follow the installation.
+
+Open *pgAdmin4* and create at your selected server a database (for example name it *BroBringsBody*)
+
+Then to connect it to prisma in the [_.env_](.env) file set `DATABASE_URL` in this format:
+```Properties
+DATABASE_URL="postgres://[SERVER_USERNAME]:[PASSWORD]@[SERVER_URL]/[DATABASE]"
+```
 
 ## Compile and run the project
 
