@@ -7,19 +7,22 @@ import { ApplicationData } from './applicationData.model';
 @Injectable({
   providedIn: 'root',
 })
-export class ApplicationService implements OnInit {
+export class ApplicationService{
   adminCount: number = 0;
   constructor(
     private httpClient: HttpClient,
     private authService: AuthService,
     private destroyRef: DestroyRef
-  ) {}
-
-  ngOnInit(): void {
+  ) {
+    console.log('🤠')
     const subscription = this.getUsers('ADMIN').subscribe(
       (admins) => (this.adminCount = admins.length)
     );
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
+  }
+
+  ngOnInit(): void {
+    
   }
 
   getMyApplications() {

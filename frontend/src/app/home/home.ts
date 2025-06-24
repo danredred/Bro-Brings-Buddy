@@ -90,6 +90,7 @@ export class Home implements OnInit {
     this.applicationService.closeApplication(id).subscribe(
       (app) =>
         this.myAppliction.update((a) => {
+          this.getUsers()
           a[index] = app;
           return [...a];
         }),

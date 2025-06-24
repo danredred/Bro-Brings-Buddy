@@ -79,11 +79,11 @@ export class ApplictionsService {
       aboutUser.permission === 'MEMBER' &&
       submitterUser.permission !== 'ADMIN'
     ) {
-      return new ForbiddenException(
+      throw new ForbiddenException(
         'You are too simple to understand the ways of upgrading a member',
       );
     } else if (aboutUser.permission === 'ADMIN') {
-      return new ConflictException('Only God can make a king👑');
+      throw new ConflictException('Only God can make a king👑');
     }
     const type: ApplicationType =
       aboutUser.permission === 'MEMBER' ? 'TOADMIN' : 'TOMEMBER';
@@ -91,9 +91,10 @@ export class ApplictionsService {
       aboutUser: { connect: aboutUser },
       submitterUser: { connect: submitterUser },
       type: type,
-      approvingUsers: { connect: submitterUser },
     };
-
+    if (submitterUser.permission==='ADMIN'){
+      application.approvingUsers={ connect: submitterUser }
+    }
     // create in the DB
     const app = await this.databaseService.application.create({
       data: application,

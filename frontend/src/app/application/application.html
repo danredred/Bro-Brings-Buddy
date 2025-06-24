@@ -46,10 +46,10 @@
     <button
       matButton
       (click)="action.emit({id:app().id,action:(isAproving()?'DEAPROVE':'APROVE')})"
-    >
+    [matTooltip]="isAproving()?'deaprove':'aprove'">
       {{(isAproving())?'❌':'✅'}}</button
     >} @if(isSubmitter()){
-    <button matButton (click)="action.emit({id:app().id,action:'CLOSE'})">
+    <button matButton matTooltip="close application" (click)="action.emit({id:app().id,action:'CLOSE'})">
       🗑️
     </button>
     }

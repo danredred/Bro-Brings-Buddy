@@ -12,6 +12,7 @@ import { User } from '../shared/user/user';
 import { AuthService } from '../auth/auth.service';
 import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-application',
@@ -26,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
     User,
     MatButton,
     MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './application.html',
   styleUrl: './application.css',
