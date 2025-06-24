@@ -1,25 +1,15 @@
-import { Component, DestroyRef, signal } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  MinLengthValidator,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-
-import { AuthResponseData, AuthService } from './auth-service';
-import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import {
-  MatCard,
-  MatCardActions,
-  MatCardContent,
-} from '@angular/material/card';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCard, MatCardActions, MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { NgOptimizedImage } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { AuthResponseData, AuthService } from './auth.service';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-auth',
   imports: [
@@ -37,8 +27,8 @@ import { NgOptimizedImage } from '@angular/common';
   styleUrl: './auth.css',
 })
 export class Auth {
+  private readonly snackBar = inject(MatSnackBar);
   isLoginMode = signal(true);
-  error = signal<string | null>(null);
   form = new FormGroup({
     // TODO: ADD INVALID ERROR MESSAGES
     username: new FormControl<string>('', {
@@ -57,7 +47,6 @@ export class Auth {
 
   onSwitchMode() {
     this.isLoginMode.update((mode) => !mode);
-    this.error.set(null);
     this.form.reset();
   }
 
@@ -82,8 +71,7 @@ export class Auth {
         this.router.navigate(['home']);
       },
       error: (error) => {
-        this.error.set(error);
-        console.log('Error!');
+        this.snackBar.open(error,'Dismiss',{duration:5000})
       },
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());

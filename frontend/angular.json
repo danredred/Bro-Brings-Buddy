@@ -22,14 +22,10 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css",
               "src/app/ngm-dev-blocks/styles/ngm-dev-blocks-styles.scss"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {

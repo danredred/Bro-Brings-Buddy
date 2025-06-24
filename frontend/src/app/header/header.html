@@ -1,13 +1,66 @@
-<nav>
-  <img routerLink="/" class="logo" src="logo.png" alt="Logo" />
-  <ul class="center-options">
-    <li><a>Home</a></li>
-    <li><a>About</a></li>
-  </ul>
-  <ul>
-    @if(isAuthenticated()){
-    <li><app-usercard [username]="userName()"/></li>
-    <li><a (click)="onLogOut()">logout</a></li>
-}
-  </ul>
-</nav>
+<mat-sidenav-container class=" min-h-screen md:min-h-auto" style="height: 100%;">
+  <mat-sidenav-content class="popo bg-gray-100 dark:bg-gray-900">
+    <mat-toolbar class="px-0! border-b border-outline-variant">
+      <div
+        class="flex-1 w-full max-w-7xl mx-auto flex items-center px-4 sm:px-6 lg:px-8"
+      >
+        <img class="size-8 logo" src="logo.png" alt="Bor Brings Body" />
+
+        <div class="ml-10">
+          @if (app()) {
+          <div class="flex items-baseline space-x-4">
+            @for (item of navigation(); track item) {
+            <a
+              mat-button
+              [routerLink]="item.href"
+              [class]="
+                          isActive(item.href)
+                            ? 'bg-[color-mix(in_srgb,_var(--mat-sys-primary)_10%,_transparent)]!'
+                            : ''
+                        "
+              [attr.aria-current]="isActive(item.href) ? 'page' : undefined"
+            >
+              {{ item.name }}
+            </a>
+            }
+          </div>
+          }
+        </div>
+        @if (app()) {
+
+        <div class="flex items-center gap-2 ml-auto user">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="userMenu"
+            aria-label="User menu"
+            class="p-1!"
+          >
+            <app-user-profile
+              [username]="app()!.username"
+              class="size-8! rounded-full object-cover"
+            />
+            
+          </button>
+          <label>{{app()!.username}}</label>
+        </div>
+        }
+      </div>
+    </mat-toolbar>
+
+    <mat-menu #userMenu="matMenu">
+      <a mat-menu-item (click)="onLogout()"> logout🪵 </a>
+    </mat-menu>
+
+    <header class="bg-surface shadow-sm dark:shadow-gray-500/50">
+      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <h1 class="text-headline-large font-bold tracking-tight">{{dashBoardText()}}</h1>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8" style="height: 100%;">
+        <ng-content></ng-content>
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

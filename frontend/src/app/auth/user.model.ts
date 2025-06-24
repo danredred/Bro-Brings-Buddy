@@ -12,10 +12,10 @@ export class User {
     }
     return this._token;
   }
-  get isAdmin(){
+  get isAdmin() {
     return this._permission === 'ADMIN';
   }
-  get isMember(){
-    return this._permission === 'MEMBER'
+  get isMember() {
+    return this._permission === 'MEMBER';
   }
 }

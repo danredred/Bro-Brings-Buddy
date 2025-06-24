@@ -1,45 +1,12 @@
-* {
-  box-sizing: border-box;
-}
+/* You can add global styles to this file, and also import other style files */
 
-html {
-  height: 100%;
-}
-
+html,
 body {
-  font-family: "Poppins", sans-serif;
-  background-image: radial-gradient(circle at center, white, gray);
-  margin: 0;
-  padding: 0;
   height: 100%;
 }
-
-/* input {
-  border-radius: 7px;
-  margin-left: 10px;
-}
-
-button {
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
-} */
-
-.alert {
-  border-radius: 10px;
-  padding: 10px;
-  border-style: dashed;
-  width: fit-content;
-  margin: auto;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-.alert-error {
-  border-color: red;
-  background-color: rgb(230, 191, 191);
-  color: rgb(125, 6, 6);
-  font-weight: bold;
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .logo {
@@ -47,4 +14,12 @@ button {
   mask-image: url(../public/logo-masking.png);
   mask-repeat: no-repeat;
   mask-size: contain;
+}
+
+.full-height {
+  height: 100vh; /* Full viewport height */
+}
+
+.scroll-view *{
+  margin-bottom: 5px;
 }

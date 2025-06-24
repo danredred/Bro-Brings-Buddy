@@ -1,99 +1,69 @@
-<!-- <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  @if (form.dirty&&form.invalid&&form.touched) {
-    <div class="alert alert-invalid">
-      <p>{{error()===null? 'Password must be at least 6 characters':error()}}</p>
-    </div>
-  }
-  @else if(error()!==null){
-    <div class="alert alert-error">
-      <p>{{error()}}</p>
-    </div>
-  }
-  
-  <h2>{{isLoginMode()? 'Login' : 'Sign Up'}}</h2>
-  <main>
-    <div class="control-column">
-      <div class="control">
-        <label for="username">Username</label>
-        <input id="username" formControlName="username" maxlength="16"/>
-      </div>
-      <div class="control">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" maxlength="16"/>
-      </div>
-    </div>
-    <div class="control-buttons">
-      <button (click)="onSwitchMode()">{{!isLoginMode()? 'Login' : 'Sign Up'}}</button>
-      <button class="login" type="submit">{{isLoginMode()? 'Login' : 'Sign Up'}}</button>
-    </div>
-  </main>
-</form> -->
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-4 max-w-7xl mx-auto">
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="flex flex-col space-y-4 p-4">
-          <img
-            src="logo.png"
-            alt="Logo"
-            height="48"
-            width="48"
-            class="inline logo" />
-          <h1 class="text-3xl">{{isLoginMode()? 'Login' : 'Sign Up'}}</h1>
-          <p>to continue to Application</p>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="flex flex-col space-y-4 p-4">
+            <img
+              src="logo.png"
+              alt="Logo"
+              height="48"
+              width="48"
+              class="inline logo" />
+            <h1 class="text-3xl">{{isLoginMode()? 'Login' : 'Sign Up'}}</h1>
+            <p>to continue to Application</p>
+          </div>
+  
+          <div class="flex flex-col space-y-2 p-4 md:mt-12">
+            <mat-form-field class="w-full">
+              <mat-label>Username</mat-label>
+              <input matInput type="username" formControlName="username" />
+              @if (
+                (form.get('username')?.touched || form.get('username')?.dirty) &&
+                form.get('username')?.hasError('required')
+              ) {
+                <mat-error>
+                  <mat-icon class="form-field-error-icon">error</mat-icon>
+                  Username is required</mat-error
+                >
+              }
+              @if (
+                (form.get('username')?.touched || form.get('username')?.dirty) &&
+                form.get('username')?.hasError('username')
+              ) {
+                <mat-error>
+                  <mat-icon class="form-field-error-icon">error</mat-icon>
+                  Username is invalid
+                </mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field class="w-full">
+              <mat-label>Password</mat-label>
+              <input matInput type="password" formControlName="password" />
+              @if (
+                (form.get('password')?.touched || form.get('password')?.dirty) &&
+                form.get('password')?.hasError('required')
+              ) {
+                <mat-error>
+                  <mat-icon class="form-field-error-icon">error</mat-icon>
+                  Password is required</mat-error
+                >
+              }
+              @if (
+                (form.get('password')?.touched || form.get('password')?.dirty) &&
+                form.get('password')?.hasError('minlength')
+              ) {
+                <mat-error>
+                  <mat-icon class="form-field-error-icon">error</mat-icon>
+                  Password must be 6 to 16 characters
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
         </div>
-
-        <div class="flex flex-col space-y-2 p-4 md:mt-12">
-          <mat-form-field class="w-full">
-            <mat-label>Username</mat-label>
-            <input matInput type="username" formControlName="username" />
-            @if (
-              (form.get('email')?.touched || form.get('email')?.dirty) &&
-              form.get('email')?.hasError('required')
-            ) {
-              <mat-error>
-                <mat-icon class="form-field-error-icon">error</mat-icon>
-                Email is required</mat-error
-              >
-            }
-            @if (
-              (form.get('username')?.touched || form.get('username')?.dirty) &&
-              form.get('username')?.hasError('username')
-            ) {
-              <mat-error>
-                <mat-icon class="form-field-error-icon">error</mat-icon>
-                Email is invalid
-              </mat-error>
-            }
-          </mat-form-field>
-          <mat-form-field class="w-full">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" formControlName="password" />
-            @if (
-              (form.get('password')?.touched || form.get('password')?.dirty) &&
-              form.get('password')?.hasError('required')
-            ) {
-              <mat-error>
-                <mat-icon class="form-field-error-icon">error</mat-icon>
-                Password is required</mat-error
-              >
-            }
-            @if (
-              (form.get('password')?.touched || form.get('password')?.dirty) &&
-              form.get('password')?.hasError('minlength')
-            ) {
-              <mat-error>
-                <mat-icon class="form-field-error-icon">error</mat-icon>
-                Password must be at least 6 characters
-              </mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-flat-button (click)="onSwitchMode()">{{isLoginMode()? 'Create account' : 'Already have an account'}}</button>
-      <button mat-flat-button type="submit">{{isLoginMode()? 'Login' : 'Sign Up'}}</button>
-    </mat-card-actions>
-  </mat-card>
-</form>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <a mat-button (click)="onSwitchMode()">{{isLoginMode()? 'Create account' : 'Already have an account'}}</a>
+        <button mat-flat-button type="submit">{{isLoginMode()? 'Login' : 'Sign Up'}}</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>

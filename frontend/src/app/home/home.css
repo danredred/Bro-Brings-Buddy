@@ -1,10 +1,23 @@
-main {
+:host {
+  align-content: center;
+}
+
+.col-list{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   width: 90%;
-  height: 90%;
-  max-width: 40rem;
-  margin: 3rem auto;
-  padding: 2rem;
-  background: linear-gradient(180deg, #a0a3a3, #bdc1c1);
-  border-radius: 8px;
-  box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
+}
+
+.viewport {
+  padding-top: 1.5rem;
+  overflow-x: auto; /* Horizontal scrolling */
+  display: flex;
+  height: 80%;
+  width: 100%;
+  min-width: 300px;
+}
+
+.application{
+  flex: 0 0 auto;
 }
