@@ -1,4 +1,4 @@
-import { Permission } from "generated/prisma";
+import { Permission } from 'generated/prisma';
 
 export interface TokenDto {
   token: string;

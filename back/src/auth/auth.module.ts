@@ -4,7 +4,7 @@ import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   providers: [AuthService],
-  imports:[DatabaseModule],
-  exports:[AuthService]
+  imports: [DatabaseModule],
+  exports: [AuthService],
 })
 export class AuthModule {}

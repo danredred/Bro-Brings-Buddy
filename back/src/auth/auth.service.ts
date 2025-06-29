@@ -1,4 +1,4 @@
-import { Header, Injectable, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { TokenDto } from './dto/token.dto';
 import { Permission } from 'generated/prisma';
@@ -37,7 +37,7 @@ export class AuthService implements OnModuleDestroy {
   }
 
   private removeExpiredTokens() {
-    let userIds: number[] = [];
+    const userIds: number[] = [];
     this.tokens = this.tokens.filter((token) => {
       if (
         token.expirationDate > new Date() &&
@@ -58,7 +58,7 @@ export class AuthService implements OnModuleDestroy {
     const expirationDate = new Date(Date.now() + tokenValidTime * 1000);
     const token = bytesToString(
       await sha256(
-        username + Date.now() + expirationDate.toDateString + userId,
+        username + Date.now() + expirationDate.toDateString() + userId,
       ),
     );
     this.tokens = this.tokens.filter((t) => t.userId !== userId);
@@ -78,7 +78,6 @@ export class AuthService implements OnModuleDestroy {
   }
 
   getUserId(token: string) {
-    const p = this.tokens.find((t) => t.token == token);
     return this.tokens.find((t) => t.token == token)?.userId;
   }
 }

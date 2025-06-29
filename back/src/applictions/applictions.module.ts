@@ -7,6 +7,6 @@ import { DatabaseModule } from 'src/database/database.module';
 @Module({
   controllers: [ApplictionsController],
   providers: [ApplictionsService],
-  imports: [AuthModule, DatabaseModule]
+  imports: [AuthModule, DatabaseModule],
 })
 export class ApplictionsModule {}

@@ -46,8 +46,8 @@ export class ApplictionsService {
       },
     });
     // create a return compatable array
-    let ret: ApplicationReturnData[] = [];
-    for (let app of applictions.values()) {
+    const ret: ApplicationReturnData[] = [];
+    for (const app of applictions.values()) {
       ret.push(formatForReturn(app));
     }
     return ret;
@@ -92,8 +92,8 @@ export class ApplictionsService {
       submitterUser: { connect: submitterUser },
       type: type,
     };
-    if (submitterUser.permission==='ADMIN'){
-      application.approvingUsers={ connect: submitterUser }
+    if (submitterUser.permission === 'ADMIN') {
+      application.approvingUsers = { connect: submitterUser };
     }
     // create in the DB
     const app = await this.databaseService.application.create({
@@ -118,8 +118,8 @@ export class ApplictionsService {
       },
     });
     // create a return compatable array
-    let ret: ApplicationReturnData[] = [];
-    for (let app of applications.values()) {
+    const ret: ApplicationReturnData[] = [];
+    for (const app of applications.values()) {
       ret.push(formatForReturn(app));
     }
     return ret;
@@ -158,7 +158,7 @@ export class ApplictionsService {
     if (!app.approvingUsers.filter((userA) => userA.id === user.id).length) {
       throw new ConflictException("You didn't aprove");
     }
-    
+
     return formatForReturn(
       await this.databaseService.application.update({
         where: { id: applicationId },

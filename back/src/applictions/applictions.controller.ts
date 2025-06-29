@@ -5,13 +5,10 @@ import {
   Headers,
   Param,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard, Permissions } from 'src/auth/auth.guard';
 import { ApplictionsService } from './applictions.service';
-import { tokenHeaderDto } from 'src/auth/dto/headers.dto';
-import { application } from 'express';
 
 @Controller('applictions')
 export class ApplictionsController {
@@ -46,10 +43,7 @@ export class ApplictionsController {
   @UseGuards(AuthGuard)
   @Permissions('ADMIN', 'MEMBER')
   @Delete('/:id')
-  closeApliction(
-    @Param('id') id: string,
-    @Headers('token') token: string,
-  ) {
+  closeApliction(@Param('id') id: string, @Headers('token') token: string) {
     return this.applictionService.closeApplication(+id, token);
   }
 

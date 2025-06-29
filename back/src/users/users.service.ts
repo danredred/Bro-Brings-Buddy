@@ -16,7 +16,7 @@ export interface AuthToken {
   expirationDate: Date;
 }
 
-const forbiddenNames = ['approve/', '🦧', 'king', 'popo']
+const forbiddenNames = ['approve/', '🦧', 'king', 'popo'];
 
 @Injectable()
 export class UsersService {
@@ -38,10 +38,10 @@ export class UsersService {
       );
       throw new ConflictException('USERNAME_EXSITS');
     }
-  
-    for(let name of forbiddenNames.values()){
+
+    for (const name of forbiddenNames.values()) {
       if (userAuthDto.username.toLowerCase().includes(name)) {
-        throw new NotAcceptableException('USERNAME_BAD')
+        throw new NotAcceptableException('USERNAME_BAD');
       }
     }
 
@@ -53,24 +53,27 @@ export class UsersService {
     const ret = await this.databaseService.user.create({
       data: createUserDto,
     });
-    return await this.authService.addToken(ret.id, ret.username, ret.permission);
+    return await this.authService.addToken(
+      ret.id,
+      ret.username,
+      ret.permission,
+    );
   }
 
-  async showUsers(permission?:Permission, noApplication:boolean=false) {
-    const where:any = {};
+  async showUsers(permission?: Permission, noApplication: boolean = false) {
+    const where: any = {};
 
-    if (permission){
-      where.permission=permission
-    
+    if (permission) {
+      where.permission = permission;
     }
-    if(noApplication){
-      where.application={none:{status:'PENDING'}}
+    if (noApplication) {
+      where.application = { none: { status: 'PENDING' } };
     }
-    const users = await this.databaseService.user.findMany({where})
-    
-    let ret:string[] = []
-    for( let i of users.values()){
-      ret.push(i.username)
+    const users = await this.databaseService.user.findMany({ where });
+
+    const ret: string[] = [];
+    for (const i of users.values()) {
+      ret.push(i.username);
     }
     return ret;
   }
@@ -84,6 +87,10 @@ export class UsersService {
       // Error if no matching user
       throw new NotFoundException('INVALID_USER_CREDENTIAL');
     }
-    return await this.authService.addToken(ret.id, ret.username, ret.permission);
+    return await this.authService.addToken(
+      ret.id,
+      ret.username,
+      ret.permission,
+    );
   }
 }

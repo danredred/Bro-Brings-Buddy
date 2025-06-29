@@ -10,9 +10,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEnterDto } from './dto/user-enter.dto';
-import { tokenHeaderDto } from 'src/auth/dto/headers.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { permission } from 'process';
 import { Permission } from 'generated/prisma';
 
 @Controller('users')
