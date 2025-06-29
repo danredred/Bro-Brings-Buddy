@@ -1,22 +1,25 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
-import {
-  ApplicationService,
-  applicationSorter,
-} from '../application/application.service';
+
 import { Application } from '../application/application';
 import { ApplicationData } from '../application/applicationData.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import {  MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { UserProfile } from '../shared/user-profile/user-profile';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { AuthService } from '../auth/auth.service';
+import {
+  ApplicationService,
+  applicationSorter,
+} from '../application/application.service';
 
 @Component({
   selector: 'app-admin',
@@ -31,12 +34,14 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     MatInputModule,
     UserProfile,
     MatDatepickerModule,
+    MatProgressSpinnerModule
   ],
   providers:[provideNativeDateAdapter()],
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })
 export class Admin implements OnInit {
+  isLoading = signal<boolean>(false);
   private applications = signal<ApplicationData[]>([]);
   filtersType = signal<'TOADMIN' | 'TOMEMBER' | undefined>(undefined);
   filtersStatus = signal<undefined | 'PENDING' | 'CLOSED' | 'APPROVED'>(
@@ -78,8 +83,10 @@ export class Admin implements OnInit {
     private readonly snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
+    this.isLoading.set(true);
     this.applicationService.getApplications().subscribe(
       (apps) => {
+        this.isLoading.set(false);
         this.applications.set(apps);
       },
       (error) => this.snackBar.open(error, 'Dismiss', { duration: 5000 })

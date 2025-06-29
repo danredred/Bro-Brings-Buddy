@@ -50,10 +50,17 @@ $ npx prisma migrate dev -n init
 #### Creating a DB
 
 We can create a postgreSQL server for this example. [Download](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) PostgreSQL if not installed and follow the installation.
+In the installtion wizard setup the password for the postgres server.
+Next check the box of 'open stuck builder'.
+In the stuck builder wizard selcet the latest Server version in the tree thingy.
+You should select the 'skip installation' in the end of the wizard.
 
-Open *pgAdmin4* and create at your selected server a database (for example name it *BroBringsBody*)
+If you forgot the password: uninstall postgresql and in the `C:\Program Files\PostgreSQL\[VESRSION]` delete the `data` folder. Then reinstall postgres.
+
+Open _pgAdmin4_ connect to the server with the password and create at your selected server a database by right clicking _databases_ and selection create new. Name it as you like. (for example name it _BroBringsBody_)
 
 Then to connect it to prisma in the [_.env_](.env) file set `DATABASE_URL` in this format:
+
 ```Properties
 DATABASE_URL="postgres://[SERVER_USERNAME]:[PASSWORD]@[SERVER_URL]/[DATABASE]"
 ```

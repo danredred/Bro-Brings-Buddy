@@ -35,8 +35,12 @@
       <mat-form-field>
         <mat-label>Start Date</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate placeholder="Start date" [(ngModel)]="filterStart"/>
-          <input matEndDate placeholder="End date" [(ngModel)]="filterEnd"/>
+          <input
+            matStartDate
+            placeholder="Start date"
+            [(ngModel)]="filterStart"
+          />
+          <input matEndDate placeholder="End date" [(ngModel)]="filterEnd" />
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
@@ -44,6 +48,7 @@
     </div>
   </mat-expansion-panel>
 </mat-accordion>
+@if (isLoading()) {<mat-spinner></mat-spinner>} @else {
 <cdk-virtual-scroll-viewport
   itemSize="600px"
   class="scroll-view"
@@ -59,4 +64,4 @@
   }
 </cdk-virtual-scroll-viewport>
 
-
+}
