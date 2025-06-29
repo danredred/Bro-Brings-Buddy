@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ApplicationType, Prisma, Status } from 'generated/prisma';
+import { Application, ApplicationType, Prisma, Status } from 'generated/prisma';
 import { AuthService } from 'src/auth/auth.service';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -27,7 +27,7 @@ function formatForReturn(data): ApplicationReturnData {
     status: data.status,
     about: data.aboutUser.username,
     created: data.createdDate,
-  };
+  } as ApplicationReturnData;
 }
 
 @Injectable()
@@ -98,11 +98,11 @@ export class ApplictionsService {
     // create in the DB
     const app = await this.databaseService.application.create({
       data: application,
-      include: {
-        aboutUser: true,
-        approvingUsers: true,
-        submitterUser: true,
-      },
+      // include: {
+      //   aboutUser: true,
+      //   approvingUsers: true,
+      //   submitterUser: true,
+      // },
     });
     return formatForReturn(app);
   }

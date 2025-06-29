@@ -92,6 +92,7 @@ export class Admin implements OnInit {
       (error) => this.snackBar.open(error, 'Dismiss', { duration: 5000 })
     );
   }
+
   onAction(
     data: { id: number; action: 'APROVE' | 'DEAPROVE' | 'CLOSE' },
     index: number
@@ -115,8 +116,7 @@ export class Admin implements OnInit {
           apps[index] = app;
           return [...apps];
         });
-      },
-      (error) => this.snackBar.open(error, 'Dismiss', { duration: 5000 })
+      }
     );
   }
 }

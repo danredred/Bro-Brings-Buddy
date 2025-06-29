@@ -1,6 +1,9 @@
 import { Component, computed, DestroyRef, OnInit, signal } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { ApplicationService, applicationSorter } from '../application/application.service';
+import {
+  ApplicationService,
+  applicationSorter,
+} from '../application/application.service';
 import { ApplicationData } from '../application/applicationData.model';
 import { MatListModule } from '@angular/material/list';
 import { Application } from '../application/application';
@@ -22,7 +25,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatMenuModule,
     User,
     MatGridListModule,
-    ScrollingModule
+    ScrollingModule,
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -35,7 +38,7 @@ export class Home implements OnInit {
     readonly snackbar: MatSnackBar
   ) {}
   private myApplictions = signal<ApplicationData[]>([]);
-  applications = computed(()=>this.myApplictions().sort(applicationSorter))
+  applications = computed(() => this.myApplictions().sort(applicationSorter));
   isAdmin = computed(() => this.authService.userData()?.isAdmin === true);
   isMember = computed(() => this.authService.userData()?.isMember === true);
   peasants = signal<string[]>([]);
@@ -46,10 +49,9 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     // get my applications
-    const subscription = this.applicationService.getMyApplications().subscribe(
-      (apps) => this.myApplictions.set(apps),
-      (error) => this.errorMessage(error)
-    );
+    const subscription = this.applicationService
+      .getMyApplications()
+      .subscribe((apps) => this.myApplictions.set(apps));
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
     this.getUsers();
   }
@@ -58,44 +60,34 @@ export class Home implements OnInit {
     if (
       this.authService.userData()?.isMember ||
       this.authService.userData()?.isAdmin
-    ) {  // if Member or Admin update the peasants list
-      this.applicationService.getUsers('PEASANT').subscribe(
-        (users) => {
-          this.peasants.set(users);
-        },
-        (error) => this.errorMessage(error)
-      );
+    ) {
+      // if Member or Admin update the peasants list
+      this.applicationService.getUsers('PEASANT').subscribe((users) => {
+        this.peasants.set(users);
+      });
     } //if member update the members list
     if (this.authService.userData()?.isAdmin) {
-      this.applicationService.getUsers('MEMBER').subscribe(
-        (users) => this.members.set(users),
-        (error) => this.errorMessage(error)
-      );
+      this.applicationService
+        .getUsers('MEMBER')
+        .subscribe((users) => this.members.set(users));
     }
   }
 
   onSubmitUser(username: string) {
-    this.applicationService.createApplication(username).subscribe(
-      (app) =>
-        this.myApplictions.update((a) => {
-          this.getUsers();
-          return [app, ...a];
-        }),
-      (error) => this.errorMessage(error)
+    this.applicationService.createApplication(username).subscribe((app) =>
+      this.myApplictions.update((a) => {
+        this.getUsers();
+        return [app, ...a];
+      })
     );
-  }
-  errorMessage(error: string) {
-    this.snackbar.open(error, 'OK');
   }
   onCloseApp(id: number, index: number) {
-    this.applicationService.closeApplication(id).subscribe(
-      (app) =>{
-        this.getUsers();
-        this.myApplictions.update((a) => {
-          a[index] = app;
-          return [...a];
-        })},
-      (error) => this.errorMessage(error)
-    );
+    this.applicationService.closeApplication(id).subscribe((app) => {
+      this.getUsers();
+      this.myApplictions.update((a) => {
+        a[index] = app;
+        return [...a];
+      });
+    });
   }
 }
