@@ -4,7 +4,7 @@ import {
   ApplicationService,
   applicationSorter,
 } from '../application/application.service';
-import { ApplicationData } from '../application/applicationData.model';
+import { ApplicationData, UserData } from '../application/applicationData.model';
 import { MatListModule } from '@angular/material/list';
 import { Application } from '../application/application';
 import { MatCardModule } from '@angular/material/card';
@@ -41,8 +41,8 @@ export class Home implements OnInit {
   applications = computed(() => this.myApplictions().sort(applicationSorter));
   isAdmin = computed(() => this.authService.userData()?.isAdmin === true);
   isMember = computed(() => this.authService.userData()?.isMember === true);
-  peasants = signal<string[]>([]);
-  members = signal<string[]>([]);
+  peasants = signal<UserData[]>([]);
+  members = signal<UserData[]>([]);
   image = computed(() =>
     this.isAdmin() ? 'logo.png' : this.isMember() ? 'member.png' : 'peasant.png'
   );

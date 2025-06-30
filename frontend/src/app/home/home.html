@@ -11,8 +11,8 @@
       </button>
       <mat-menu #menu="matMenu">
         @for (user of peasants(); track $index) {
-        <button (click)="onSubmitUser(user)" mat-menu-item>
-          <app-user [username]="user" />
+        <button (click)="onSubmitUser(user.username)" mat-menu-item>
+          <app-user [username]="user.username" />
         </button>
         }
       </mat-menu> </mat-grid-tile
@@ -24,8 +24,8 @@
       </button>
       <mat-menu #menu="matMenu">
         @for (user of members(); track $index) {
-        <button (click)="onSubmitUser(user)" mat-menu-item>
-          <app-user [username]="user" />
+        <button (click)="onSubmitUser(user.username)" mat-menu-item>
+          <app-user [username]="user.username" />
         </button>
         }
       </mat-menu>
@@ -52,4 +52,3 @@
       }
     </mat-grid-tile>
   </mat-grid-list>
- 

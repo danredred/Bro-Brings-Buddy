@@ -1,9 +1,13 @@
+export interface UserData {
+  username: string;
+}
+
 export interface ApplicationData {
   id: number;
-  submitter: string;
-  approvers: string[];
+  submitterUser: UserData;
+  approvingUsers: UserData[];
   type: 'TOADMIN' | 'TOMEMBER';
   status: 'PENDING' | 'CLOSED' | 'APPROVED';
-  about: string;
+  aboutUser: UserData;
   created: Date;
 }

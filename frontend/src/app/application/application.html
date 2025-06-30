@@ -3,9 +3,9 @@
   appearance="outlined"
 >
   <mat-card-header>
-    <app-user-profile mat-card-avatar [username]="app().about" />
+    <app-user-profile mat-card-avatar [username]="app().aboutUser.username" />
 
-    <mat-card-title>{{app().about}}</mat-card-title>
+    <mat-card-title>{{app().aboutUser.username}}</mat-card-title>
     <mat-card-subtitle>#{{app().id}}</mat-card-subtitle>
 
     <mat-card-subtitle>{{app().status.toLowerCase()}}</mat-card-subtitle>
@@ -18,7 +18,7 @@
 
     <div class="row-contianer">
       <label>Submitter</label>
-      <app-user [username]="app().submitter" />
+      <app-user [username]="app().submitterUser.username" />
     </div>
 
     <mat-accordion>
@@ -34,8 +34,8 @@
             ></mat-progress-bar> </mat-panel-description
           >}
         </mat-expansion-panel-header>
-        @for (user of app().approvers; track $index) {
-        <app-user [username]="user" />
+        @for (user of app().approvingUsers; track $index) {
+        <app-user [username]="user.username" />
         }
       </mat-expansion-panel>
     </mat-accordion>

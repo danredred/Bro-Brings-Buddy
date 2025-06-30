@@ -33,11 +33,18 @@ export class ApplictionsController {
   @UseGuards(AuthGuard)
   @Permissions('ADMIN', 'MEMBER')
   @Post('/:username')
-  addApliction(
+  async addApliction(
     @Param('username') username: string,
     @Headers('token') token: string,
   ) {
-    return this.applictionService.addAppliction(username, token);
+    const application = await this.applictionService.addAppliction(
+      username,
+      token,
+    );
+    if (await this.applictionService.checkAprovales(application.id)) {
+      return await this.applictionService.getApplication(application.id);
+    }
+    return application;
   }
 
   @UseGuards(AuthGuard)
@@ -56,11 +63,18 @@ export class ApplictionsController {
   @UseGuards(AuthGuard)
   @Permissions('ADMIN')
   @Post('approve/:id')
-  approveApplication(
+  async approveApplication(
     @Param('id') applicationId: string,
     @Headers('token') token: string,
   ) {
-    return this.applictionService.approve(+applicationId, token);
+    const application = await this.applictionService.approve(
+      +applicationId,
+      token,
+    );
+    if (await this.applictionService.checkAprovales(application.id)) {
+      return await this.applictionService.getApplication(application.id);
+    }
+    return application;
   }
 
   @UseGuards(AuthGuard)

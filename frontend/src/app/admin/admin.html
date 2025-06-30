@@ -27,7 +27,7 @@
         <mat-autocomplete #auto="matAutocomplete">
           @for (user of submittingUsersOptions(); track $index) {
           <mat-option [value]="user"
-            ><app-user-profile [username]="user"
+            ><app-user-profile [username]="user.username"
           /></mat-option>
           }
         </mat-autocomplete>

@@ -53,11 +53,11 @@ export class Admin implements OnInit {
 
   submittingUsersOptions = computed(() => {
     return this.applications()
-      .map((app) => app.submitter)
+      .map((app) => app.submitterUser)
       .filter((user) =>
-        user.toLowerCase().startsWith(this.filtersUser().toLowerCase())
+        user.username.toLowerCase().startsWith(this.filtersUser().toLowerCase())
       )
-      .sort((a, b) => a.length - b.length);
+      .sort((a, b) => a.username.length - b.username.length);
   });
 
   applicationShower = computed(() =>
@@ -69,7 +69,7 @@ export class Admin implements OnInit {
 
         if (this.filtersType() && this.filtersType() !== app.type) return false;
 
-        if (!app.submitter.toLowerCase().startsWith(this.filtersUser().toLowerCase()))
+        if (!app.submitterUser.username.toLowerCase().startsWith(this.filtersUser().toLowerCase()))
           return false;
         if (this.filterStart()!==undefined && new Date( app.created)<this.filterStart()!) return false;
         if (this.filterEnd() && new Date(app.created) > this.filterEnd()!)

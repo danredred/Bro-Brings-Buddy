@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { DestroyRef, Injectable, OnInit } from '@angular/core';
+import { DestroyRef, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { catchError, of, tap, throwError } from 'rxjs';
-import { ApplicationData } from './applicationData.model';
+import { catchError, map, of, tap } from 'rxjs';
+import { ApplicationData, UserData } from './applicationData.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export function applicationSorter(a: ApplicationData, b: ApplicationData) {
@@ -39,21 +39,23 @@ export class ApplicationService {
       })
       .pipe(
         catchError((err) => this.errorHandler(err)),
-        tap((apps) => apps.sort(applicationSorter))
+        tap((apps) => {console.log(apps);return apps.sort(applicationSorter)})
       );
   }
 
   getUsers(permission?: 'ADMIN' | 'MEMBER' | 'PEASANT') {
     const headers = this.authService.headers();
     return this.httpClient
-      .get<string[]>(
+      .get<UserData[]>(
         'http://localhost:3000/users' +
           (permission ? `?noapplication=true&permission=${permission}` : ''),
         {
           headers: headers,
         }
       )
-      .pipe(catchError((err) => this.errorHandler(err)));
+      .pipe(
+        catchError((err) => this.errorHandler(err))
+      );
   }
   getApplications() {
     const headers = this.authService.headers();

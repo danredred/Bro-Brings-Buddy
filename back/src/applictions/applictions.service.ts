@@ -4,31 +4,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Application, ApplicationType, Prisma, Status } from 'generated/prisma';
+import { ApplicationType, Prisma } from 'generated/prisma';
 import { AuthService } from 'src/auth/auth.service';
 import { DatabaseService } from 'src/database/database.service';
 
-export interface ApplicationReturnData {
-  id: number;
-  submitter: string;
-  approvers: string[];
-  type: ApplicationType;
-  status: Status;
-  about: string;
-  created: Date;
-}
-
-function formatForReturn(data): ApplicationReturnData {
-  return {
-    id: data.id,
-    submitter: data.submitterUser.username,
-    approvers: data.approvingUsers.map((user) => user.username),
-    type: data.type,
-    status: data.status,
-    about: data.aboutUser.username,
-    created: data.createdDate,
-  } as ApplicationReturnData;
-}
+const friendlyQueryReturnFormmating = {
+  include: {
+    approvingUsers: { select: { username: true } },
+    submitterUser: { select: { username: true } },
+    aboutUser: { select: { username: true } },
+  },
+  omit: { aboutUserId: true, submitterUserId: true },
+};
 
 @Injectable()
 export class ApplictionsService {
@@ -38,22 +25,12 @@ export class ApplictionsService {
   ) {}
 
   async getAllApplictions() {
-    const applictions = await this.databaseService.application.findMany({
-      include: {
-        aboutUser: true,
-        approvingUsers: true,
-        submitterUser: true,
-      },
+    return await this.databaseService.application.findMany({
+      ...friendlyQueryReturnFormmating,
     });
-    // create a return compatable array
-    const ret: ApplicationReturnData[] = [];
-    for (const app of applictions.values()) {
-      ret.push(formatForReturn(app));
-    }
-    return ret;
   }
 
-  async addAppliction(targetUserName, token) {
+  async addAppliction(targetUserName: string, token: string) {
     const aboutUser = await this.databaseService.user.findUnique({
       where: { username: targetUserName },
     });
@@ -96,83 +73,51 @@ export class ApplictionsService {
       application.approvingUsers = { connect: submitterUser };
     }
     // create in the DB
-    const app = await this.databaseService.application.create({
+    return await this.databaseService.application.create({
       data: application,
-      // include: {
-      //   aboutUser: true,
-      //   approvingUsers: true,
-      //   submitterUser: true,
-      // },
+      ...friendlyQueryReturnFormmating,
     });
-    return formatForReturn(app);
   }
 
   async getUserApplications(token: string) {
     const id = this.authService.getUserId(token)!;
-    const applications = await this.databaseService.application.findMany({
+    return await this.databaseService.application.findMany({
       where: { OR: [{ aboutUserId: id }, { submitterUserId: id }] },
-      include: {
-        aboutUser: true,
-        approvingUsers: true,
-        submitterUser: true,
-      },
+      ...friendlyQueryReturnFormmating,
     });
-    // create a return compatable array
-    const ret: ApplicationReturnData[] = [];
-    for (const app of applications.values()) {
-      ret.push(formatForReturn(app));
-    }
-    return ret;
   }
 
   async approve(applicationId: number, token: string) {
-    const app = await this.getApplication(applicationId);
+    const app = await this.getUsersDataOfApplication(applicationId);
     const user = await this.getUser(token);
     if (app.approvingUsers.some((userA) => userA.id === user.id)) {
       throw new ConflictException('You already aproved this');
     }
 
     //update the application
-    await this.databaseService.application.update({
+
+    return await this.databaseService.application.update({
       where: { id: applicationId },
       data: { approvingUsers: { connect: { id: user.id } } },
+      ...friendlyQueryReturnFormmating,
     });
-
-    // call the checking function
-    await this.checkAprovales(applicationId);
-    return formatForReturn(
-      await this.databaseService.application.findUnique({
-        where: { id: applicationId },
-        include: {
-          aboutUser: true,
-          approvingUsers: true,
-          submitterUser: true,
-        },
-      }),
-    );
   }
 
   async deapprove(applicationId: number, token: string) {
-    const app = await this.getApplication(applicationId);
+    const app = await this.getUsersDataOfApplication(applicationId);
     const user = await this.getUser(token);
     if (!app.approvingUsers.filter((userA) => userA.id === user.id).length) {
       throw new ConflictException("You didn't aprove");
     }
 
-    return formatForReturn(
-      await this.databaseService.application.update({
-        where: { id: applicationId },
-        data: { approvingUsers: { disconnect: { id: user.id } } },
-        include: {
-          aboutUser: true,
-          approvingUsers: true,
-          submitterUser: true,
-        },
-      }),
-    );
+    return await this.databaseService.application.update({
+      where: { id: applicationId },
+      data: { approvingUsers: { disconnect: { id: user.id } } },
+      ...friendlyQueryReturnFormmating,
+    });
   }
 
-  private async checkAprovales(id: number) {
+  async checkAprovales(id: number): Promise<boolean> {
     const app = await this.databaseService.application.findUnique({
       where: { id },
       select: { approvingUsers: true, type: true, aboutUserId: true },
@@ -207,6 +152,7 @@ export class ApplictionsService {
       where: { id },
       data: { status: 'APPROVED' },
     });
+    return true;
   }
 
   private async getUser(token: string) {
@@ -220,7 +166,7 @@ export class ApplictionsService {
     return user;
   }
 
-  private async getApplication(applicationId: number) {
+  private async getUsersDataOfApplication(applicationId: number) {
     const app = await this.databaseService.application.findUnique({
       where: { id: applicationId, status: 'PENDING' },
       select: { approvingUsers: true, submitterUserId: true },
@@ -232,22 +178,26 @@ export class ApplictionsService {
   }
 
   async closeApplication(applicationId: number, token: string) {
-    const app = await this.getApplication(applicationId);
+    const app = await this.getUsersDataOfApplication(applicationId);
     const user = await this.getUser(token);
     if (app.submitterUserId !== user.id) {
       throw new ConflictException('You are not the submitter');
     }
+    return await this.databaseService.application.update({
+      where: { id: applicationId },
+      data: { status: 'CLOSED' },
+      ...friendlyQueryReturnFormmating,
+    });
+  }
 
-    return formatForReturn(
-      await this.databaseService.application.update({
-        where: { id: applicationId },
-        data: { status: 'CLOSED' },
-        include: {
-          aboutUser: true,
-          approvingUsers: true,
-          submitterUser: true,
-        },
-      }),
-    );
+  async getApplication(applicationId: number) {
+    const app = await this.databaseService.application.findUnique({
+      where: { id: applicationId },
+      ...friendlyQueryReturnFormmating,
+    });
+    if (null === app) {
+      throw new NotFoundException('Did not found the application');
+    }
+    return app;
   }
 }

@@ -61,7 +61,7 @@ export class UsersService {
   }
 
   async showUsers(permission?: Permission, noApplication: boolean = false) {
-    const where: any = {};
+    const where: { permission?: Permission; application?: any } = {};
 
     if (permission) {
       where.permission = permission;
@@ -69,13 +69,10 @@ export class UsersService {
     if (noApplication) {
       where.application = { none: { status: 'PENDING' } };
     }
-    const users = await this.databaseService.user.findMany({ where });
-
-    const ret: string[] = [];
-    for (const i of users.values()) {
-      ret.push(i.username);
-    }
-    return ret;
+    return await this.databaseService.user.findMany({
+      where,
+      select: { username: true },
+    });
   }
 
   async login(userAuthDto: UserEnterDto) {

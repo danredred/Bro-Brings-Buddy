@@ -27,7 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     User,
     MatButton,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './application.html',
   styleUrl: './application.css',
@@ -42,14 +42,15 @@ export class Application {
   action = output<{ id: number; action: 'APROVE' | 'DEAPROVE' | 'CLOSE' }>();
   isAdmin = computed(() => this.authService.userData()?.isAdmin === true);
   isSubmitter = computed(
-    () => this.app().submitter === this.authService.userData()?.username
+    () =>
+      this.app().submitterUser.username === this.authService.userData()?.username
   );
   isAproving = computed(() => {
     const username = this.authService.userData()?.username;
     if (!username) return false;
-    return this.app().approvers.includes(username);
+    return this.app().approvingUsers.find((a)=>a.username===username)!==undefined;
   });
-  approveCount = computed(() => this.app().approvers.length);
+  approveCount = computed(() => this.app().approvingUsers.length);
   approvalNeeded = computed(() => {
     if (
       this.applicationService.adminCount < 2 ||
